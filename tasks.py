@@ -1,3 +1,7 @@
+from __future__ import absolute_import, unicode_literals
+from .celery import app
+
+
 @app.task
 def list_all_groups():
     halo = apputils.Halo()
