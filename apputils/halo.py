@@ -2,6 +2,7 @@ import cloudpassage
 import haloevents
 import os
 from utility import Utility as util
+from formatter import Formatter as fmt
 
 
 class Halo(object):
@@ -11,32 +12,35 @@ class Halo(object):
         self.session = cloudpassage.HaloSession(self.halo_api_key,
                                                 self.halo_api_secret)
 
-    def list_all_servers(self):
+    def list_all_servers_formatted(self):
         servers = cloudpassage.Server(self.session)
-        return servers.list_all()
+        return fmt.format_list(servers.list_all(), "server_facts")
 
-    def list_all_groups(self):
+    def list_all_groups_formatted(self):
         groups = cloudpassage.ServerGroup(self.session)
-        return groups.list_all()
+        return fmt.format_list(groups.list_all(), "group_facts")
 
-    def generate_server_report(self, target):
+    def generate_server_report_formatted(self, target):
         server_id = self.get_id_for_server_target(target)
-        structure = {}
+        result = ""
         if server_id is not None:
             server_obj = cloudpassage.Server(self.session)
-            structure["facts"] = server_obj.describe(server_id)
-            structure["events"] = self.get_events_by_server(server_id)
-            structure["issues"] = self.get_issues_by_server(server_id)
-        return structure
+            result = fmt.format_item(server_obj.describe(server_id),
+                                     "server_facts")
+            result += fmt.format_list(self.get_issues_by_server(server_id),
+                                      "issue")
+            result += fmt.format_list(self.get_events_by_server(server_id),
+                                      "event")
+        return result
 
-    def generate_group_report(self, target):
+    def generate_group_report_formatted(self, target):
         group_id = self.get_id_for_group_target(target)
-        structure = {}
+        result = ""
         if group_id is not None:
             group_obj = cloudpassage.ServerGroup(self.session)
-            structure["facts"] = group_obj.describe(group_id)
-            structure["policies"] = self.get_group_policies(structure["facts"])
-        return structure
+            result = fmt.format_item(group_obj.describe(group_id), "group")
+            result += self.get_group_policies(structure["facts"])
+        return result
 
     def get_group_policies(self, grp_struct):
         retval = []
@@ -60,9 +64,9 @@ class Halo(object):
         return retval
 
     def get_policy_list(self, policy_ids, policy_type):
-        retval = []
+        retval = ""
         for policy_id in policy_ids:
-            retval.append(self.get_policy_metadata(policy_id, policy_type))
+            retval += self.get_policy_metadata(policy_id, policy_type)
         return retval
 
     def get_policy_metadata(self, policy_id, policy_type):
@@ -82,7 +86,7 @@ class Halo(object):
             pol = cloudpassage.LidsPolicy(self.session)
         else:
             return ""
-        retval = pol.describe(policy_id)
+        retval = fmt.policy_meta(pol.describe(policy_id), p_ref[policy_type])
         return retval
 
     def get_id_for_group_target(self, target):
