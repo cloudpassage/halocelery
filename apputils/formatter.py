@@ -3,15 +3,21 @@ from string import Template as T
 
 class Formatter(object):
     """All the message formatting happens in this class."""
-    lib = {"issue": T("  Issue $rule_key\n" +
-                      "    Status $status\n" +
-                      "    Type     $issue_type\n" +
-                      "    Created  $created_at\n"),
-           "event": T("  Event $type\n" +
+    lib = {"issue": T("  ----------------------------------------\n" +
+                      "  Issue:\n" +
+                      "    ID:       $id\n" +
+                      "    Status:   $status\n" +
+                      "    Critical: $critical\n" +
+                      "    Rule key: $rule_key\n" +
+                      "    Type:     $issue_type\n" +
+                      "    Created:  $created_at\n"),
+           "event": T("  ----------------------------------------\n" +
+                      "  Event $type\n" +
+                      "    ID:      $id\n"
+                      "    Type:    $type\n"
                       "    Critical $critical\n" +
                       "    Created  $created_at\n" +
-                      "    Message  $message\n" +
-                      "    ----------------------------------------\n"),
+                      "    Message  $message\n"),
            "server_facts": T("---------------------------\n" +
                              "Server Hostname     $hostname\n" +
                              "  Server ID         $id\n" +
@@ -23,11 +29,11 @@ class Formatter(object):
                              "  Connecting IP     $connecting_ip_address\n" +
                              "  State             $state\n" +
                              "  State Change      $last_state_change\n"),
-           "policy_meta": T("    Policy name $name\n" +
+           "policy_meta": T("    ----------------------------------------\n" +
+                            "    Policy name $name\n" +
                             "      Policy type   $poltype \n" +
                             "      Policy ID     $id\n" +
-                            "      Description   $description\n" +
-                            "      ---------------------------------------\n"),
+                            "      Description   $description\n"),
            "group_facts": T("---------------------------\n" +
                             "Group name $name\n" +
                             "  Group ID      $id\n" +
