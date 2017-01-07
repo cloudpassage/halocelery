@@ -31,4 +31,5 @@ def report_server_formatted(target):
 @app.task
 def servers_in_group_formatted(target):
     """Accepts groupname or ID"""
+    halo = apputils.Halo()
     return halo.list_servers_in_group_formatted(target)
