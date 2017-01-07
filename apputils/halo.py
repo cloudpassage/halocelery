@@ -150,11 +150,12 @@ class Halo(object):
         issues = hh.get_paginated(url, pagination_key, 5, params=params)
         return issues
 
-    def list_servers_in_group(self, target):
+    def list_servers_in_group_formatted(self, target):
         """Return a list of servers in group after sending through formatter"""
         group = cloudpassage.ServerGroup(self.session)
         group_id = self.get_id_for_group_target(target)
         if group_id is None:
             return group_id
         else:
-            return group.list_members(group_id)
+            return fmt.format_list(group.list_members(group_id),
+                                   "server_facts")
