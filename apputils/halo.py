@@ -126,15 +126,16 @@ class Halo(object):
                 result = None
         return result
 
-    def get_events_by_server(self, server_id, number_of_events=5):
-        """Return events for a server, Goes back as far as a week."""
+    def get_events_by_server(self, server_id, number_of_events=20):
+        """Return events for a server, Goes back as far as a week to find 20."""
         events = []
+        h_h = cloudpassage.HttpHelper(self.session)
         starting = util.iso8601_one_week_ago()
-        search_params = {"server_id": server_id, "sort_by": "created_at.desc"}
-        h_e = haloevents.HaloEvents(self.halo_api_key, self.halo_api_secret,
-                                    start_timestamp=starting,
-                                    search_params=search_params)
-        for event in h_e:
+        search_params = {"server_id": server_id,
+                         "sort_by": "created_at.desc",
+                         "since": starting}
+        halo_events = h_h.get("/v1/events", search_params)
+        for event in halo_events:
             if len(events) >= number_of_events:
                 return events
             events.append(event)
