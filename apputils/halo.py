@@ -42,9 +42,9 @@ class Halo(object):
         result = ""
         if group_id is not None:
             group_obj = cloudpassage.ServerGroup(self.session)
-            result = fmt.format_item(group_obj.describe(group_id),
-                                     "group_facts")
-            result += self.get_group_policies(structure["facts"])
+            grp_struct = group_obj.describe(group_id)
+            result = fmt.format_item(grp_struct, "group_facts")
+            result += self.get_group_policies(grp_struct)
         return result
 
     def get_group_policies(self, grp_struct):
