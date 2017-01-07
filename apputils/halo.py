@@ -48,25 +48,25 @@ class Halo(object):
         return result
 
     def get_group_policies(self, grp_struct):
-        retval = []
+        retval = ""
         firewall_keys = ["firewall_policy_id", "windows_firewall_policy_id"]
         csm_keys = ["policy_ids", "windows_policy_ids"]
         fim_keys = ["fim_policy_ids", "windows_fim_policy_ids"]
         lids_keys = ["lids_policy_ids"]
         print("Getting meta for FW policies")
         for fwp in firewall_keys:
-            retval.append(self.get_policy_metadata(grp_struct[fwp], "FW"))
+            retval += self.get_policy_metadata(grp_struct[fwp], "FW")
         print("Getting meta for CSM policies")
         for csm in csm_keys:
-            retval.append(self.get_policy_list(grp_struct[csm], "CSM"))
+            retval += self.get_policy_list(grp_struct[csm], "CSM")
         print("Getting meta for FIM policies")
         for fim in fim_keys:
-            retval.append(self.get_policy_list(grp_struct[fim], "FIM"))
+            retval += self.get_policy_list(grp_struct[fim], "FIM")
         print("Getting meta for LIDS policies")
         for lids in lids_keys:
-            retval.append(self.get_policy_list(grp_struct[lids], "LIDS"))
+            retval += self.get_policy_list(grp_struct[lids], "LIDS")
         print("Gathered all policy metadata successfully")
-        return '\n'.join(retval)
+        return retval
 
     def get_policy_list(self, policy_ids, policy_type):
         retval = ""
