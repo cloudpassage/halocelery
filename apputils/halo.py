@@ -66,7 +66,7 @@ class Halo(object):
         for lids in lids_keys:
             retval.append(self.get_policy_list(grp_struct[lids], "LIDS"))
         print("Gathered all policy metadata successfully")
-        return retval
+        return '\n'.join(retval)
 
     def get_policy_list(self, policy_ids, policy_type):
         retval = ""
