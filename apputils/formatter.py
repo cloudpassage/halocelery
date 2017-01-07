@@ -5,40 +5,43 @@ class Formatter(object):
     """All the message formatting happens in this class."""
     lib = {"issue": T("  ----------------------------------------\n" +
                       "  Issue:\n" +
+                      "    Type:     $issue_type\n" +
                       "    ID:       $id\n" +
                       "    Status:   $status\n" +
                       "    Critical: $critical\n" +
                       "    Rule key: $rule_key\n" +
-                      "    Type:     $issue_type\n" +
                       "    Created:  $created_at\n"),
            "event": T("  ----------------------------------------\n" +
                       "  Event:\n" +
-                      "    ID:      $id\n"
-                      "    Critical $critical\n" +
-                      "    Type:    $type\n"
-                      "    Created  $created_at\n" +
-                      "    Message  $message\n"),
+                      "    Type:     $type\n"
+                      "    ID:       $id\n"
+                      "    Critical: $critical\n" +
+                      "    Created:  $created_at\n" +
+                      "    Message:  $message\n"),
            "server_facts": T("---------------------------\n" +
-                             "Server Hostname     $hostname\n" +
-                             "  Server ID         $id\n" +
-                             "  Platform          $platform\n" +
-                             "  Platform version  $platform_version\n" +
-                             "  OS version        $os_version\n" +
-                             "  Group             $group_name\n" +
-                             "  Primary IP        $primary_ip_address\n" +
-                             "  Connecting IP     $connecting_ip_address\n" +
-                             "  State             $state\n" +
-                             "  State Change      $last_state_change\n"),
+                             "Server:\n" +
+                             "  Hostname:          $hostname\n" +
+                             "  Server ID:         $id\n" +
+                             "  Platform:          $platform\n" +
+                             "  Platform version:  $platform_version\n" +
+                             "  OS version:        $os_version\n" +
+                             "  Group:             $group_name\n" +
+                             "  Primary IP:        $primary_ip_address\n" +
+                             "  Connecting IP:     $connecting_ip_address\n" +
+                             "  State:             $state\n" +
+                             "  State change:      $last_state_change\n"),
            "policy_meta": T("    ----------------------------------------\n" +
-                            "    Policy name $name\n" +
-                            "      Policy type   $poltype \n" +
-                            "      Policy ID     $id\n" +
-                            "      Description   $description\n"),
+                            "    Policy:\n" +
+                            "      Name:         $name\n" +
+                            "      Policy ID:    $id\n" +
+                            "      Policy type:  $poltype \n" +
+                            "      Description:  $description\n"),
            "group_facts": T("---------------------------\n" +
-                            "Group name $name\n" +
-                            "  Group ID      $id\n" +
-                            "  Description   $description\n" +
-                            "  Tag           $tag\n")}
+                            "Group:\n" +
+                            "  Name:         $name\n" +
+                            "  Group ID:     $id\n" +
+                            "  Tag:          $tag\n" +
+                            "  Description:  $description\n")}
 
     @classmethod
     def format_list(cls, items, item_type):
