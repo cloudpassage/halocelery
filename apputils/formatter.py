@@ -12,10 +12,10 @@ class Formatter(object):
                       "    Type:     $issue_type\n" +
                       "    Created:  $created_at\n"),
            "event": T("  ----------------------------------------\n" +
-                      "  Event $type\n" +
+                      "  Event:\n" +
                       "    ID:      $id\n"
-                      "    Type:    $type\n"
                       "    Critical $critical\n" +
+                      "    Type:    $type\n"
                       "    Created  $created_at\n" +
                       "    Message  $message\n"),
            "server_facts": T("---------------------------\n" +
