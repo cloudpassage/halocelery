@@ -134,7 +134,7 @@ class Halo(object):
         search_params = {"server_id": server_id,
                          "sort_by": "created_at.desc",
                          "since": starting}
-        halo_events = h_h.get("/v1/events", search_params)
+        halo_events = h_h.get("/v1/events", params=search_params)
         for event in halo_events:
             if len(events) >= number_of_events:
                 return events
