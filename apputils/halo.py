@@ -24,11 +24,15 @@ class Halo(object):
         server_id = self.get_id_for_server_target(target)
         result = ""
         if server_id is not None:
+            print("ServerReport: Starting report for %s" % server_id)
             server_obj = cloudpassage.Server(self.session)
+            print("ServerReport: Getting server facts")
             result = fmt.format_item(server_obj.describe(server_id),
                                      "server_facts")
+            print("ServerReport: Getting server issues")
             result += fmt.format_list(self.get_issues_by_server(server_id),
                                       "issue")
+            print("ServerReport: Getting server events")
             result += fmt.format_list(self.get_events_by_server(server_id),
                                       "event")
         return result
@@ -122,8 +126,8 @@ class Halo(object):
                 result = None
         return result
 
-    def get_events_by_server(self, server_id, number_of_events=20):
-        """Return events for a server.  Defaults to last 100."""
+    def get_events_by_server(self, server_id, number_of_events=5):
+        """Return events for a server.  Defaults to last 5."""
         events = []
         starting = util.iso8601_yesterday()
         search_params = {"server_id": server_id, "sort_by": "created_at.desc"}
@@ -131,9 +135,9 @@ class Halo(object):
                                     start_timestamp=starting,
                                     search_params=search_params)
         for event in h_e:
-            events.append(event)
             if len(events) >= number_of_events:
-                break
+                return events
+            events.append(event)
         return events
 
     def get_issues_by_server(self, server_id):
