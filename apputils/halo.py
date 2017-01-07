@@ -127,9 +127,9 @@ class Halo(object):
         return result
 
     def get_events_by_server(self, server_id, number_of_events=5):
-        """Return events for a server.  Defaults to last 5."""
+        """Return events for a server, Goes back as far as a week."""
         events = []
-        starting = util.iso8601_yesterday()
+        starting = util.iso8601_one_week_ago()
         search_params = {"server_id": server_id, "sort_by": "created_at.desc"}
         h_e = haloevents.HaloEvents(self.halo_api_key, self.halo_api_secret,
                                     start_timestamp=starting,
