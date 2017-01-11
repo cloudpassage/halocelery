@@ -2,11 +2,8 @@ from __future__ import absolute_import, unicode_literals
 from .celery import app
 import halocelery.apputils as apputils
 
-import scanslib
 import tempfile
-
 import cloudpassage
-
 import os
 import time
 from datetime import datetime
@@ -57,10 +54,10 @@ def scans_to_s3(target_date, s3_bucket_name):
     file_number = 0
     counter = 0
     # Validate date
-    if scanslib.Utility.target_date_is_valid(env_date) is False:
+    if apputils.Utility.target_date_is_valid(env_date) is False:
         msg = "Bad date! %s" % env_date
         sys.exit(2)
-    scan_cache = scanslib.GetScans(config.key_id, config.secret_key,
+    scan_cache = apputils.GetScans(config.key_id, config.secret_key,
                                    scans_per_file, env_date)
     for batch in scan_cache:
         counter = counter + len(batch)
@@ -72,7 +69,7 @@ def scans_to_s3(target_date, s3_bucket_name):
         output_file = "Halo-Scans_%s_%s" % (env_date, str(file_number))
         full_output_path = os.path.join(output_dir, output_file)
         # print("Writing %s" % full_output_path)
-        dump_file = scanslib.Outfile(full_output_path)
+        dump_file = apputils.Outfile(full_output_path)
         dump_file.flush(batch)
         dump_file.compress()
         if s3_bucket_name is not None:
