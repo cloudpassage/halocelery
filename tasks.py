@@ -48,7 +48,7 @@ def scans_to_s3(target_date, s3_bucket_name):
     halo = apputils.Halo()
     try:
         halo.scans_to_s3(target_date, s3_bucket_name, output_dir)
-    except exception as e:
+    except Exception as e:
         "Exception encountered: %s" % e
         "Cleaning up temp dir %s" % output_dir
-        raise e
+        raise self.retry(countdown=120, exc=e, max_retries=5)
