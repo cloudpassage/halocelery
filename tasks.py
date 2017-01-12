@@ -42,7 +42,7 @@ def servers_in_group_formatted(target):
     return halo.list_servers_in_group_formatted(target)
 
 
-@app.task(bind=True, max_retries=5)
+@app.task(bind=True)
 def scans_to_s3(self, target_date, s3_bucket_name):
     output_dir = tempfile.mkdtemp()
     halo = apputils.Halo()
@@ -51,4 +51,4 @@ def scans_to_s3(self, target_date, s3_bucket_name):
     except Exception as e:
         "Exception encountered: %s" % e
         "Cleaning up temp dir %s" % output_dir
-        raise self.retry(countdown=120, exc=e)
+        raise self.retry(countdown=120, exc=e, max_retries=5)
