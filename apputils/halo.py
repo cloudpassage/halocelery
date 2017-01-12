@@ -174,7 +174,7 @@ class Halo(object):
             msg = "Bad date! %s" % target_date
             sys.exit(2)
         scan_cache = util.GetScans(self.halo_api_key, self.halo_api_secret,
-                                       scans_per_file, target_date)
+                                   scans_per_file, target_date)
         for batch in scan_cache:
             counter = counter + len(batch)
             try:
