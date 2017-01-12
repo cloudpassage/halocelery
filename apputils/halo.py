@@ -2,6 +2,7 @@ import cloudpassage
 from datetime import datetime
 import haloevents
 import os
+from outfile import Outfile
 from utility import Utility as util
 from formatter import Formatter as fmt
 
@@ -169,10 +170,10 @@ class Halo(object):
         file_number = 0
         counter = 0
         # Validate date
-        if apputils.Utility.target_date_is_valid(target_date) is False:
+        if util.target_date_is_valid(target_date) is False:
             msg = "Bad date! %s" % target_date
             sys.exit(2)
-        scan_cache = apputils.GetScans(self.halo_api_key, self.halo_api_secret,
+        scan_cache = util.GetScans(self.halo_api_key, self.halo_api_secret,
                                        scans_per_file, target_date)
         for batch in scan_cache:
             counter = counter + len(batch)
@@ -184,7 +185,7 @@ class Halo(object):
             output_file = "Halo-Scans_%s_%s" % (target_date, str(file_number))
             full_output_path = os.path.join(output_dir, output_file)
             # print("Writing %s" % full_output_path)
-            dump_file = apputils.Outfile(full_output_path)
+            dump_file = Outfile(full_output_path)
             dump_file.flush(batch)
             dump_file.compress()
             if s3_bucket_name is not None:
