@@ -43,7 +43,7 @@ def servers_in_group_formatted(target):
 
 
 @app.task(bind=True, max_retries=5)
-def scans_to_s3(target_date, s3_bucket_name):
+def scans_to_s3(self, target_date, s3_bucket_name):
     output_dir = tempfile.mkdtemp()
     halo = apputils.Halo()
     try:
