@@ -2,6 +2,7 @@ import cloudpassage
 from datetime import datetime
 import haloevents
 import os
+from get_scans import GetScans
 from outfile import Outfile
 from utility import Utility as util
 from formatter import Formatter as fmt
@@ -173,8 +174,8 @@ class Halo(object):
         if util.target_date_is_valid(target_date) is False:
             msg = "Bad date! %s" % target_date
             sys.exit(2)
-        scan_cache = util.GetScans(self.halo_api_key, self.halo_api_secret,
-                                   scans_per_file, target_date)
+        scan_cache = GetScans(self.halo_api_key, self.halo_api_secret,
+                              scans_per_file, target_date)
         for batch in scan_cache:
             counter = counter + len(batch)
             try:
