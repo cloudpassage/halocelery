@@ -160,7 +160,7 @@ class Halo(object):
             return fmt.format_list(group.list_members(group_id),
                                    "server_facts")
 
-    def scans_to_s3(target_date, s3_bucket_name, output_dir):
+    def scans_to_s3(self, target_date, s3_bucket_name, output_dir):
         print("Using temp dir: %s" % output_dir)
         scans_per_file = 10000
         start_time = datetime.now()
