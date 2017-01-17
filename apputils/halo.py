@@ -1,7 +1,9 @@
 import cloudpassage
 from datetime import datetime
-import haloevents
+# import haloevents
 import os
+import shutil
+# import sys
 import time
 from get_scans import GetScans
 from outfile import Outfile
@@ -132,7 +134,7 @@ class Halo(object):
         return result
 
     def get_events_by_server(self, server_id, number_of_events=20):
-        """Return events for a server, Goes back as far as a week to find 20."""
+        """Return events for a server, Goes back up to a week to find 20."""
         events = []
         h_h = cloudpassage.HttpHelper(self.session)
         starting = util.iso8601_one_week_ago()
@@ -174,7 +176,7 @@ class Halo(object):
         # Validate date
         if util.target_date_is_valid(target_date) is False:
             msg = "Bad date! %s" % target_date
-            sys.exit(2)
+            raise AttributeError(msg)
         scan_cache = GetScans(self.halo_api_key, self.halo_api_secret,
                               scans_per_file, target_date)
         for batch in scan_cache:
