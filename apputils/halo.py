@@ -167,7 +167,8 @@ class Halo(object):
                                    "server_facts")
 
     def scans_to_s3(self, target_date, s3_bucket_name, output_dir):
-        print("Using temp dir: %s" % output_dir)
+        ret_msg = ""
+        ret_msg += "Using temp dir: %s \n" % output_dir
         scans_per_file = 10000
         start_time = datetime.now()
         s3_bucket_name = s3_bucket_name
@@ -196,12 +197,13 @@ class Halo(object):
                 time.sleep(1)
                 dump_file.upload_to_s3(s3_bucket_name)
         # Cleanup and print results
-        print("Deleting temp dir: %s" % output_dir)
+        ret_msg += "Deleting temp dir: %s" % output_dir
         shutil.rmtree(output_dir)
         end_time = datetime.now()
 
         difftime = str(end_time - start_time)
 
-        print("Total time taken: %s scans for %s: %s") % (str(counter),
-                                                          target_date,
-                                                          difftime)
+        ret_msg += "Total time taken: %s scans for %s: %s" % (str(counter),
+                                                              target_date,
+                                                              difftime)
+        return ret_msg
