@@ -2,6 +2,7 @@ import cloudpassage
 from datetime import datetime
 import haloevents
 import os
+import time
 from get_scans import GetScans
 from outfile import Outfile
 from utility import Utility as util
