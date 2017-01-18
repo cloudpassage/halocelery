@@ -6,6 +6,7 @@ import shutil
 # import sys
 import time
 from get_scans import GetScans
+from get_events import GetEvents
 from outfile import Outfile
 from utility import Utility as util
 from formatter import Formatter as fmt
