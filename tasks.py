@@ -67,17 +67,15 @@ def events_to_s3(self, target_date, s3_bucket_name):
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
 
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    sender.add_periodic_task(
-        crontab(hour=20, minute=25),
-        events_to_s3(apputils.Utility.iso8601_yesterday(),
-                     os.getenv("EVENTS_S3_BUCKET"),
-                     name="Daily Events Exporter")
-    )
-    sender.add_periodic_task(
-        crontab(hour=20, minute=45),
-        scans_to_s3(apputils.Utility.iso8601_yesterday(),
-                    os.getenv("SCANS_S3_BUCKET"),
-                    name="Daily Scans Exporter")
-    )
+app.conf.beat.schedule = {
+    'daily-events-export': {
+        'task': 'tasks.events_to_s3',
+        'schedule': crontab(hour=20, minute=25),
+        'args': (apputils.Utility.iso8601_yesterday(),
+                 os.getenv("EVENTS_S3_BUCKET"))},
+    'daily-scans-export': {
+        'task': 'tasks.scans_to_s3',
+        'schedule': crontab(hour=20, minute=45),
+        'args': (apputils.Utility.iso8601_yesterday(),
+                 os.getenv("SCANS_S3_BUCKET"))}
+    }
