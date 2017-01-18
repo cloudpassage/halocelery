@@ -10,7 +10,9 @@ import os
 # from datetime import datetime
 
 events_hour = int(os.getenv("EVENT_EXPORT_HOUR", 21))
+events_min = int(os.getenv("EVENT_EXPORT_MIN", 01))
 scans_hour = int(os.getenv("SCAN_EXPORT_HOUR", 21))
+scans_min = int(os.getenv("SCAN_EXPORT_MIN", 01))
 
 
 @app.task
@@ -72,13 +74,13 @@ def events_to_s3(self, target_date, s3_bucket_name):
 
 app.conf.beat_schedule = {
     'daily-events-export': {
-        'task': 'tasks.events_to_s3',
-        'schedule': crontab(hour=events_hour, minute=01),
+        'task': 'halocelery.events_to_s3',
+        'schedule': crontab(hour=events_hour, minute=events_min),
         'args': (apputils.Utility.iso8601_yesterday(),
                  os.getenv("EVENTS_S3_BUCKET"))},
     'daily-scans-export': {
-        'task': 'tasks.scans_to_s3',
-        'schedule': crontab(hour=scans_hour, minute=01),
+        'task': 'halocelery.scans_to_s3',
+        'schedule': crontab(hour=scans_hour, minute=scans_min),
         'args': (apputils.Utility.iso8601_yesterday(),
                  os.getenv("SCANS_S3_BUCKET"))}
     }
