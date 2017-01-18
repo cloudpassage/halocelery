@@ -207,3 +207,44 @@ class Halo(object):
                                                               target_date,
                                                               difftime)
         return ret_msg
+
+    def events_to_s3(self, target_date, s3_bucket_name, output_dir):
+        ret_msg = ""
+        ret_msg += "Using temp dir: %s \n" % output_dir
+        events_per_file = 10000
+        start_time = datetime.now()
+        s3_bucket_name = s3_bucket_name
+        file_number = 0
+        counter = 0
+        # Validate date
+        if util.target_date_is_valid(target_date) is False:
+            msg = "Bad date! %s" % target_date
+            raise AttributeError(msg)
+        event_cache = GetEvents(self.halo_api_key, self.halo_api_secret,
+                                events_per_file, target_date)
+        for batch in event_cache:
+            counter = counter + len(batch)
+            try:
+                print("Last timestamp in batch: %s" % batch[-1]["created_at"])
+            except IndexError:
+                pass
+            file_number = file_number + 1
+            output_file = "Halo-Events_%s_%s" % (target_date, str(file_number))
+            full_output_path = os.path.join(output_dir, output_file)
+            dump_file = Outfile(full_output_path)
+            dump_file.flush(batch)
+            dump_file.compress()
+            if s3_bucket_name is not None:
+                time.sleep(1)
+                dump_file.upload_to_s3(s3_bucket_name)
+        # Cleanup and print results
+        ret_msg += "Deleting temp dir: %s" % output_dir
+        shutil.rmtree(output_dir)
+        end_time = datetime.now()
+
+        difftime = str(end_time - start_time)
+
+        ret_msg += "Total time taken: %s events for %s: %s" % (str(counter),
+                                                               target_date,
+                                                               difftime)
+        return ret_msg
