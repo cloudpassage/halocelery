@@ -70,12 +70,12 @@ def events_to_s3(self, target_date, s3_bucket_name):
 app.conf.beat.schedule = {
     'daily-events-export': {
         'task': 'tasks.events_to_s3',
-        'schedule': crontab(hour=20, minute=25),
+        'schedule': crontab(hour=21, minute=01),
         'args': (apputils.Utility.iso8601_yesterday(),
                  os.getenv("EVENTS_S3_BUCKET"))},
     'daily-scans-export': {
         'task': 'tasks.scans_to_s3',
-        'schedule': crontab(hour=20, minute=45),
+        'schedule': crontab(hour=21, minute=31),
         'args': (apputils.Utility.iso8601_yesterday(),
                  os.getenv("SCANS_S3_BUCKET"))}
     }
