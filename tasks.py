@@ -74,12 +74,12 @@ def events_to_s3(self, target_date, s3_bucket_name):
 
 app.conf.beat_schedule = {
     'daily-events-export': {
-        'task': 'halocelery.events_to_s3',
+        'task': 'halocelery.tasks.events_to_s3',
         'schedule': crontab(hour=events_hour, minute=events_min),
         'args': (apputils.Utility.iso8601_yesterday(),
                  os.getenv("EVENTS_S3_BUCKET"))},
     'daily-scans-export': {
-        'task': 'halocelery.scans_to_s3',
+        'task': 'halocelery.tasks.scans_to_s3',
         'schedule': crontab(hour=scans_hour, minute=scans_min),
         'args': (apputils.Utility.iso8601_yesterday(),
                  os.getenv("SCANS_S3_BUCKET"))}
