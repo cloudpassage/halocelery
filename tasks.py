@@ -69,16 +69,14 @@ def events_to_s3(self, target_date, s3_bucket_name):
 
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender, **kwargs):
-    # Runs every day at 12:01pm
     sender.add_periodic_task(
-        crontab(hour=12, minute=1),
+        crontab(hour=20, minute=25),
         events_to_s3(apputils.Utility.iso8601_yesterday(),
                      os.getenv("EVENTS_S3_BUCKET"),
                      name="Daily Events Exporter")
     )
-    # Runs every day at 1:01pm
     sender.add_periodic_task(
-        crontab(hour=13, minute=1),
+        crontab(hour=20, minute=45),
         scans_to_s3(apputils.Utility.iso8601_yesterday(),
                     os.getenv("SCANS_S3_BUCKET"),
                     name="Daily Scans Exporter")
