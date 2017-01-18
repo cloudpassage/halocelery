@@ -67,7 +67,7 @@ def events_to_s3(self, target_date, s3_bucket_name):
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
 
-app.conf.beat.schedule = {
+app.conf.beat_schedule = {
     'daily-events-export': {
         'task': 'tasks.events_to_s3',
         'schedule': crontab(hour=21, minute=01),
