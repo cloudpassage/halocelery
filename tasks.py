@@ -1,12 +1,13 @@
 from __future__ import absolute_import, unicode_literals
 from .celery import app
 import halocelery.apputils as apputils
+from celery.schedules import crontab
 
 import tempfile
-import cloudpassage
+# import cloudpassage
 import os
-import time
-from datetime import datetime
+# import time
+# from datetime import datetime
 
 
 @app.task
@@ -52,3 +53,31 @@ def scans_to_s3(self, target_date, s3_bucket_name):
         "Exception encountered: %s" % e
         "Cleaning up temp dir %s" % output_dir
         raise self.retry(countdown=120, exc=e, max_retries=5)
+
+
+@app.task(bind=True)
+def events_to_s3(self, target_date, s3_bucket_name):
+    output_dir = tempfile.mkdtemp()
+    halo = apputils.Halo()
+    try:
+        halo.events_to_s3(target_date, s3_bucket_name, output_dir)
+    except Exception as e:
+        "Exception encountered: %s" % e
+        "Cleaning up temp dir %s" % output_dir
+        raise self.retry(countdown=120, exc=e, max_retries=5)
+
+
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    # Runs every day at 12:01pm
+    sender.add_periodic_task(
+        crontab(hour=12, minute=1),
+        events_to_s3(apputils.Utility.iso8601_yesterday(),
+                     os.getenv("EVENTS_S3_BUCKET"))
+    )
+    # Runs every day at 1:01pm
+    sender.add_periodic_task(
+        crontab(hour=13, minute=1),
+        events_to_s3(apputils.Utility.iso8601_yesterday(),
+                     os.getenv("SCANS_S3_BUCKET"))
+    )
