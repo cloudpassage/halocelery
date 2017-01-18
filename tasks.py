@@ -75,7 +75,7 @@ app.conf.beat_schedule = {
                  os.getenv("EVENTS_S3_BUCKET"))},
     'daily-scans-export': {
         'task': 'tasks.scans_to_s3',
-        'schedule': crontab(hour=21, minute=31),
+        'schedule': crontab(hour=21, minute=20),
         'args': (apputils.Utility.iso8601_yesterday(),
                  os.getenv("SCANS_S3_BUCKET"))}
     }
