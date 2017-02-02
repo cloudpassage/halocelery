@@ -220,7 +220,7 @@ class Halo(object):
     def firewall_report_for_group_id(self, group_id):
         fw_obj = cloudpassage.FirewallPolicy(self.session)
         group_obj = cloudpassage.ServerGroup(self.session)
-        group_struct = grp_obj.describe(group_id)
+        group_struct = group_obj.describe(group_id)
         fw_polid = group_struct["linux_firewall_policy_id"]
         if fw_polid is None:
             retval = base64.b64encode("No firewall policy for: %s" % target)
