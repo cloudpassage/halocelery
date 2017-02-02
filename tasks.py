@@ -48,6 +48,13 @@ def servers_in_group_formatted(target):
     return halo.list_servers_in_group_formatted(target)
 
 
+@app.task
+def report_group_firewall(target):
+    """Accepts a hostname or server_id"""
+    halo = apputils.Halo()
+    return halo.generate_group_firewall_report(target)
+
+
 @app.task(bind=True)
 def scans_to_s3(self, target_date, s3_bucket_name):
     output_dir = tempfile.mkdtemp()

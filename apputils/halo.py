@@ -1,15 +1,15 @@
+import base64
 import cloudpassage
 from datetime import datetime
-# import haloevents
 import os
 import shutil
-# import sys
 import time
 from get_scans import GetScans
 from get_events import GetEvents
 from outfile import Outfile
 from utility import Utility as util
 from formatter import Formatter as fmt
+from firewallgraph import FirewallGraph
 
 
 class Halo(object):
@@ -208,6 +208,26 @@ class Halo(object):
                                                               target_date,
                                                               difftime)
         return ret_msg
+
+    def generate_group_firewall_report(self, target):
+        group_id = self.get_id_for_group_target(target)
+        if group_id is None:
+            retval = base64.b64encode("Group not found: %s" % target)
+        else:
+            retval = self.firewall_report_for_group_id(group_id)
+        return retval
+
+    def firewall_report_for_group_id(self, group_id):
+        fw_obj = cloudpassage.FirewallPolicy(self.session)
+        group_obj = cloudpassage.ServerGroup(self.session)
+        group_struct = grp_obj.describe(group_id)
+        fw_polid = group_struct["linux_firewall_policy_id"]
+        if fw_polid is None:
+            retval = base64.b64encode("No firewall policy for: %s" % target)
+        else:
+            grapher = FirewallGraph(fw_obj.describe(fw_polid))
+            retval = FirewallGraph.dot_to_png(grapher.make_dotfile())
+        return retval
 
     def events_to_s3(self, target_date, s3_bucket_name, output_dir):
         ret_msg = ""
