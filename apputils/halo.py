@@ -212,7 +212,7 @@ class Halo(object):
     def generate_group_firewall_report(self, target):
         group_id = self.get_id_for_group_target(target)
         if group_id is None:
-            retval = base64.b64encode("Group not found: %s\n" % target)
+            retval = "Group not found: %s\n" % target
         else:
             retval = self.firewall_report_for_group_id(group_id)
         return retval
