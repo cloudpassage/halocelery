@@ -2,12 +2,9 @@ from __future__ import absolute_import, unicode_literals
 from .celery import app
 import halocelery.apputils as apputils
 from celery.schedules import crontab
-
 import tempfile
-# import cloudpassage
 import os
-# import time
-# from datetime import datetime
+
 
 events_hour = int(os.getenv("EVENT_EXPORT_HOUR", 21))
 events_min = int(os.getenv("EVENT_EXPORT_MIN", 01))

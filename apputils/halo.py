@@ -130,7 +130,7 @@ class Halo(object):
             try:
                 result = server.describe(target)["id"]
             except:
-                print("Not a hostnamename or server ID: " + target)
+                print("Not a hostnamename or server ID: %s\n" % target)
                 result = None
         return result
 
@@ -212,7 +212,7 @@ class Halo(object):
     def generate_group_firewall_report(self, target):
         group_id = self.get_id_for_group_target(target)
         if group_id is None:
-            retval = base64.b64encode("Group not found: %s" % target)
+            retval = base64.b64encode("Group not found: %s\n" % target)
         else:
             retval = self.firewall_report_for_group_id(group_id)
         return retval
@@ -223,7 +223,7 @@ class Halo(object):
         group_struct = group_obj.describe(group_id)
         fw_polid = group_struct["linux_firewall_policy_id"]
         if fw_polid is None:
-            retval = base64.b64encode("No firewall policy for: %s" % target)
+            retval = "No firewall policy for: %s\n" % target
         else:
             grapher = FirewallGraph(fw_obj.describe(fw_polid))
             retval = FirewallGraph.dot_to_png(grapher.make_dotfile())
