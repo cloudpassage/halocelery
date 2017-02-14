@@ -10,6 +10,7 @@ from outfile import Outfile
 from utility import Utility as util
 from formatter import Formatter as fmt
 from firewallgraph import FirewallGraph
+from scangraph import ScanGraph
 
 
 class Halo(object):
@@ -228,6 +229,19 @@ class Halo(object):
             grapher = FirewallGraph(fw_obj.describe(fw_polid))
             retval = FirewallGraph.dot_to_png(grapher.make_dotfile())
         return retval
+
+    def generate_scan_compliance_graph_for_server(self, target):
+        server_id = self.get_id_for_server_target(target)
+        if server_id is None:
+            err_str = "Unknown target: %s\n" % target
+            return err_str
+        target_scan_types = ["fim", "csm"]
+        scan_obj = cloudpassage.Scan(self.session)
+        scan_list = []
+        for s_type in target_scan_types:
+            scan_list.append(scan_obj.last_scan_results(server_id, s_type))
+        graph = ScanGraph(scan_list)
+        return graph.render_png()
 
     def events_to_s3(self, target_date, s3_bucket_name, output_dir):
         ret_msg = ""
