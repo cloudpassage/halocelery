@@ -239,7 +239,9 @@ class Halo(object):
         scan_obj = cloudpassage.Scan(self.session)
         scan_list = []
         for s_type in target_scan_types:
-            scan_list.append(scan_obj.last_scan_results(server_id, s_type))
+            results = scan_obj.last_scan_results(server_id, s_type)["scan"]
+            print results
+            scan_list.append(results)
         graph = ScanGraph(scan_list)
         return graph.render_png()
 
