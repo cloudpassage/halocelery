@@ -235,14 +235,14 @@ class Halo(object):
         if server_id is None:
             err_str = "Unknown target: %s\n" % target
             return err_str
-        target_scan_types = ["fim", "csm"]
+        target_scan_types = ["csm"]
         scan_obj = cloudpassage.Scan(self.session)
         scan_list = []
         for s_type in target_scan_types:
             results = scan_obj.last_scan_results(server_id, s_type)["scan"]
-            print results
             scan_list.append(results)
         graph = ScanGraph(scan_list)
+        print base64.b64decode(graph.render_dot())
         return graph.render_png()
 
     def events_to_s3(self, target_date, s3_bucket_name, output_dir):
