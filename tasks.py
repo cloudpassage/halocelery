@@ -58,6 +58,23 @@ def report_server_scan_graph(target):
     halo = apputils.Halo()
     return halo.generate_scan_compliance_graph_for_server(target)
 
+@app.task
+def quarantine_server(server_id, quarantine_group_name):
+    halo = apputils.Halo()
+    quarantine_group_id = halo.get_id_for_group_target(quarantine_group_name)
+    halo.move_server(server_id, quarantine_group_id)
+    msg = ("Quarantined server %s in group %s\n" % (server_id,
+                                                    quarantine_group_name))
+    return msg
+
+@app.task
+def add_ip_to_list(ip_address, ip_zone_name):
+    halo = apputils.Halo()
+    ip_zone_id = halo.get_id_for_ip_zone(ip_zone_name)
+    if ip_zone_id is None:
+        msg = ("Unable to determine ID for IP zone %s!!\n" % ip_zone_name)
+        return msg
+    return halo.add_ip_to_zone(ip_address, ip_zone_id)
 
 @app.task(bind=True)
 def scans_to_s3(self, target_date, s3_bucket_name):

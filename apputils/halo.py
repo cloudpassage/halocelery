@@ -17,8 +17,12 @@ class Halo(object):
     def __init__(self):
         self.halo_api_key = os.getenv("HALO_API_KEY")
         self.halo_api_secret = os.getenv("HALO_API_SECRET_KEY")
+        self.halo_api_key_rw = os.getenv("HALO_API_KEY_RW")
+        self.halo_api_secret_rw = os.getenv("HALO_API_SECRET_KEY_RW")
         self.session = cloudpassage.HaloSession(self.halo_api_key,
                                                 self.halo_api_secret)
+        self.rw_session = cloudpassage.HaloSession(self.halo_api_key_rw,
+                                                self.halo_api_secret_rw)
 
     def list_all_servers_formatted(self):
         servers = cloudpassage.Server(self.session)
@@ -224,7 +228,7 @@ class Halo(object):
         group_struct = group_obj.describe(group_id)
         fw_polid = group_struct["linux_firewall_policy_id"]
         if fw_polid is None:
-            retval = "No firewall policy for: %s\n" % target
+            retval = "No firewall policy for: %s\n" % group_id
         else:
             grapher = FirewallGraph(fw_obj.describe(fw_polid))
             retval = FirewallGraph.dot_to_png(grapher.make_dotfile())
@@ -244,6 +248,31 @@ class Halo(object):
         graph = ScanGraph(scan_list)
         print base64.b64decode(graph.render_dot())
         return graph.render_png()
+
+    def move_server(self, server_id, group_id):
+        """Silence is golden.  If it doesn't throw an exception, it worked."""
+        server_obj = cloudpassage.Server(self.rw_session)
+        server_obj.assign_group(server_id, group_id)
+
+    def get_id_for_ip_zone(self, ip_zone_name):
+        zone_obj = cloudpassage.FirewallZone(self.session)
+        all_zones = zone_obj.list_all()
+        for zone in all_zones:
+            if zone["name"] == ip_zone_name:
+                return zone["id"]
+        return None
+
+    def add_ip_to_zone(self, ip_address, zone_id):
+        zone_obj = cloudpassage.FirewallZone(self.rw_session)
+        existing_zone = zone_obj.describe(zone_id)
+        if ip_address in existing_zone["ip_address"]:
+            msg = "IP address %s already in zone %s !\n" % (ip_address,
+                                                            zone_id)
+        else:
+            existing_zone["ip_address"].append(ip_address)
+            zone_obj.update(existing_zone)
+            msg = "Added IP address %s to zone ID %s" % (ip_address, zone_id)
+        return msg
 
     def events_to_s3(self, target_date, s3_bucket_name, output_dir):
         ret_msg = ""
