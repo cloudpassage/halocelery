@@ -274,6 +274,17 @@ class Halo(object):
             msg = "Added IP address %s to zone ID %s" % (ip_address, zone_id)
         return msg
 
+    def remove_ip_from_zone(self, ip_address, zone_id):
+        zone_obj = cloudpassage.FirewallZone(self.rw_session)
+        existing_zone = zone_obj.describe(zone_id)
+        try:
+            existing_zone.remove(ip_address)
+            zone_obj.update(existing_zone)
+            msg = "Added IP %s to zone %s" % (ip_address, zone_id)
+        except ValueError:
+            msg = "IP %s was not found in zone %s" % (ip_address, zone_id)
+        return msg
+
     def events_to_s3(self, target_date, s3_bucket_name, output_dir):
         ret_msg = ""
         ret_msg += "Using temp dir: %s \n" % output_dir
