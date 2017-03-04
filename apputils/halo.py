@@ -262,27 +262,29 @@ class Halo(object):
                 return zone["id"]
         return None
 
-    def add_ip_to_zone(self, ip_address, zone_id):
+    def add_ip_to_zone(self, ip_address, zone_name):
         zone_obj = cloudpassage.FirewallZone(self.rw_session)
+        zone_id = self.get_id_for_ip_zone(zone_name)
         existing_zone = zone_obj.describe(zone_id)
         if ip_address in existing_zone["ip_address"]:
             msg = "IP address %s already in zone %s !\n" % (ip_address,
-                                                            zone_id)
+                                                            zone_name)
         else:
             existing_zone["ip_address"].append(ip_address)
             zone_obj.update(existing_zone)
-            msg = "Added IP address %s to zone ID %s" % (ip_address, zone_id)
+            msg = "Added IP address %s to zone ID %s\n" % (ip_address, zone_name)
         return msg
 
-    def remove_ip_from_zone(self, ip_address, zone_id):
+    def remove_ip_from_zone(self, ip_address, zone_name):
         zone_obj = cloudpassage.FirewallZone(self.rw_session)
+        zone_id = self.get_id_for_ip_zone(zone_name)
         existing_zone = zone_obj.describe(zone_id)
         try:
             existing_zone.remove(ip_address)
             zone_obj.update(existing_zone)
-            msg = "Added IP %s to zone %s" % (ip_address, zone_id)
+            msg = "Added IP %s to zone %s\n" % (ip_address, zone_name)
         except ValueError:
-            msg = "IP %s was not found in zone %s" % (ip_address, zone_id)
+            msg = "IP %s was not found in zone %s\n" % (ip_address, zone_name)
         return msg
 
     def events_to_s3(self, target_date, s3_bucket_name, output_dir):
