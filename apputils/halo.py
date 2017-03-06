@@ -265,6 +265,9 @@ class Halo(object):
     def add_ip_to_zone(self, ip_address, zone_name):
         zone_obj = cloudpassage.FirewallZone(self.rw_session)
         zone_id = self.get_id_for_ip_zone(zone_name)
+        if zone_id is None:
+            msg = "Unable to find ID for IP zone %s!\n" % zone_name
+            return msg
         existing_zone = zone_obj.describe(zone_id)
         if ip_address in existing_zone["ip_address"]:
             msg = "IP address %s already in zone %s !\n" % (ip_address,
