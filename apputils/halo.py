@@ -263,11 +263,14 @@ class Halo(object):
         return None
 
     def add_ip_to_zone(self, ip_address, zone_name):
+        update_zone = {"firewall_zone":{"name": zone_name}}
         zone_obj = cloudpassage.FirewallZone(self.rw_session)
         zone_id = self.get_id_for_ip_zone(zone_name)
         if zone_id is None:
             msg = "Unable to find ID for IP zone %s!\n" % zone_name
             return msg
+        else:
+            update_zone["firewall_zone"]["id"] = zone_id
         existing_zone = zone_obj.describe(zone_id)
         existing_ips = util.ipaddress_list_from_string(existing_zone["ip_address"])  # NOQA
         if ip_address in existing_ips:
@@ -275,23 +278,26 @@ class Halo(object):
                                                             zone_name)
         else:
             existing_ips.append(ip_address)
-            existing_zone["ip_address"] = util.ipaddress_string_from_list(existing_ips)  # NOQA
-            zone_obj.update(existing_zone)
+            update_zone["firewall_zone"]["ip_address"] = util.ipaddress_string_from_list(existing_ips)  # NOQA
+            zone_obj.update(update_zone)
             msg = "Added IP address %s to zone ID %s\n" % (ip_address, zone_name)
         return msg
 
     def remove_ip_from_zone(self, ip_address, zone_name):
+        update_zone = {"firewall_zone":{"name": zone_name}}
         zone_obj = cloudpassage.FirewallZone(self.rw_session)
         zone_id = self.get_id_for_ip_zone(zone_name)
         if zone_id is None:
             msg = "Unable to find ID for IP zone %s!\n" % zone_name
             return msg
+        else:
+            update_zone["firewall_zone"]["id"] = zone_id
         existing_zone = zone_obj.describe(zone_id)
         existing_ips = util.ipaddress_list_from_string(existing_zone["ip_address"])  # NOQA
         try:
             existing_ips.remove(ip_address)
-            existing_zone["ip_address"] = util.ipaddress_string_from_list(existing_ips)
-            zone_obj.update(existing_zone)
+            update_zone["firewall_zone"]["ip_address"] = util.ipaddress_string_from_list(existing_ips)  # NOQA
+            zone_obj.update(update_zone)
             msg = "Removed IP %s from zone %s\n" % (ip_address, zone_name)
         except ValueError:
             msg = "IP %s was not found in zone %s\n" % (ip_address, zone_name)
