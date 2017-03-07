@@ -49,3 +49,13 @@ class Utility(object):
             return True
         else:
             return False
+
+    @classmethod
+    def ipaddress_string_from_list(cls, list_structure):
+        ip_str = ",".join(list_structure)
+        return ip_str
+
+    @classmethod
+    def ipaddress_list_from_string(cls, string_of_ips):
+        ip_list = string_of_ips.split(',')
+        return ip_list

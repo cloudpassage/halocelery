@@ -269,11 +269,13 @@ class Halo(object):
             msg = "Unable to find ID for IP zone %s!\n" % zone_name
             return msg
         existing_zone = zone_obj.describe(zone_id)
-        if ip_address in existing_zone["ip_address"]:
+        existing_ips = util.ipaddress_list_from_string(existing_zone["ip_address"])  # NOQA
+        if ip_address in existing_ips:
             msg = "IP address %s already in zone %s !\n" % (ip_address,
                                                             zone_name)
         else:
-            existing_zone["ip_address"].append(ip_address)
+            existing_ips.append(ip_address)
+            existing_zone["ip_address"] = util.ipaddress_string_from_list(existing_ips)  # NOQA
             zone_obj.update(existing_zone)
             msg = "Added IP address %s to zone ID %s\n" % (ip_address, zone_name)
         return msg
@@ -285,10 +287,12 @@ class Halo(object):
             msg = "Unable to find ID for IP zone %s!\n" % zone_name
             return msg
         existing_zone = zone_obj.describe(zone_id)
+        existing_ips = util.ipaddress_list_from_string(existing_zone["ip_address"])  # NOQA
         try:
-            existing_zone.remove(ip_address)
+            existing_ips.remove(ip_address)
+            existing_zone["ip_address"] = util.ipaddress_string_from_list(existing_ips)
             zone_obj.update(existing_zone)
-            msg = "Added IP %s to zone %s\n" % (ip_address, zone_name)
+            msg = "Removed IP %s from zone %s\n" % (ip_address, zone_name)
         except ValueError:
             msg = "IP %s was not found in zone %s\n" % (ip_address, zone_name)
         return msg
