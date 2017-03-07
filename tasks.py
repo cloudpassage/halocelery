@@ -70,11 +70,11 @@ def quarantine_server(server_id, quarantine_group_name):
 @app.task
 def add_ip_to_list(ip_address, ip_zone_name):
     halo = apputils.Halo()
-    ip_zone_id = halo.get_id_for_ip_zone(ip_zone_name)
+    # ip_zone_id = halo.get_id_for_ip_zone(ip_zone_name)
     if ip_zone_id is None:
         msg = ("Unable to determine ID for IP zone %s!!\n" % ip_zone_name)
         return msg
-    return halo.add_ip_to_zone(ip_address, ip_zone_id)
+    return halo.add_ip_to_zone(ip_address, ip_zone_name)
 
 @app.task
 def remove_ip_from_list(ip_address, ip_zone_name):
