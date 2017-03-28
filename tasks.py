@@ -75,16 +75,13 @@ def add_ip_to_list(ip_address, ip_zone_name):
 @app.task
 def remove_ip_from_list(ip_address, ip_zone_name):
     halo = apputils.Halo()
-    # ip_zone_id = halo.get_id_for_ip_zone(ip_zone_name)
-    # if ip_zone_id is None:
-    #    msg = ("Unable to determine ID for IP zone %s!!\n" % ip_zone_name)
-    #    return msg
     return halo.remove_ip_from_zone(ip_address, ip_zone_name)
 
 @app.task(bind=True)
-def scans_to_s3(self, target_date, s3_bucket_name):
+def prior_day_scans_to_s3(self, s3_bucket_name):
     output_dir = tempfile.mkdtemp()
     halo = apputils.Halo()
+    target_date = apputils.Utility.iso8601_yesterday()
     try:
         halo.scans_to_s3(target_date, s3_bucket_name, output_dir)
     except Exception as e:
@@ -94,9 +91,10 @@ def scans_to_s3(self, target_date, s3_bucket_name):
 
 
 @app.task(bind=True)
-def events_to_s3(self, target_date, s3_bucket_name):
+def prior_day_events_to_s3(self, s3_bucket_name):
     output_dir = tempfile.mkdtemp()
     halo = apputils.Halo()
+    target_date = apputils.Utility.iso8601_yesterday()
     try:
         halo.events_to_s3(target_date, s3_bucket_name, output_dir)
     except Exception as e:
@@ -107,13 +105,11 @@ def events_to_s3(self, target_date, s3_bucket_name):
 
 app.conf.beat_schedule = {
     'daily-events-export': {
-        'task': 'halocelery.tasks.events_to_s3',
+        'task': 'halocelery.tasks.prior_day_events_to_s3',
         'schedule': crontab(hour=events_hour, minute=events_min),
-        'args': (apputils.Utility.iso8601_yesterday(),
-                 os.getenv("EVENTS_S3_BUCKET"))},
+        'args': (os.getenv("EVENTS_S3_BUCKET"))},
     'daily-scans-export': {
-        'task': 'halocelery.tasks.scans_to_s3',
+        'task': 'halocelery.tasks.prior_day_scans_to_s3',
         'schedule': crontab(hour=scans_hour, minute=scans_min),
-        'args': (apputils.Utility.iso8601_yesterday(),
-                 os.getenv("SCANS_S3_BUCKET"))}
+        'args': (os.getenv("SCANS_S3_BUCKET"))}
     }
