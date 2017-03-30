@@ -107,9 +107,9 @@ app.conf.beat_schedule = {
     'daily-events-export': {
         'task': 'halocelery.tasks.prior_day_events_to_s3',
         'schedule': crontab(hour=events_hour, minute=events_min),
-        'args': (os.getenv("EVENTS_S3_BUCKET"))},
+        'args': (os.getenv("EVENTS_S3_BUCKET"), )},
     'daily-scans-export': {
         'task': 'halocelery.tasks.prior_day_scans_to_s3',
         'schedule': crontab(hour=scans_hour, minute=scans_min),
-        'args': (os.getenv("SCANS_S3_BUCKET"))}
+        'args': (os.getenv("SCANS_S3_BUCKET"), )}
     }
