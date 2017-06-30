@@ -39,14 +39,19 @@ class Halo(object):
             print("ServerReport: Starting report for %s" % server_id)
             server_obj = cloudpassage.Server(self.session)
             print("ServerReport: Getting server facts")
-            result = fmt.format_item(server_obj.describe(server_id),
-                                     "server_facts")
+            facts = self.flatten_ec2(server_obj.describe(server_id))
+            if "aws_ec2" in facts:
+                result = fmt.format_item(facts, "server_ec2")
+            else:
+                result = fmt.format_item(facts, "server_facts")
             print("ServerReport: Getting server issues")
             result += fmt.format_list(self.get_issues_by_server(server_id),
                                       "issue")
             print("ServerReport: Getting server events")
             result += fmt.format_list(self.get_events_by_server(server_id),
                                       "event")
+        else:
+            result = "Unable to find server %s" % target
         return result
 
     def generate_group_report_formatted(self, target):
@@ -343,3 +348,15 @@ class Halo(object):
                                                                target_date,
                                                                difftime)
         return ret_msg
+
+    @classmethod
+    def flatten_ec2(cls, server):
+        try:
+            for k, v in server["aws_ec2"].items():
+                server[k] = v
+            if "ec2_security_groups" in server:
+                conjoined = " ,".join(server["ec2_security_groups"])
+                server["ec2_security_groups"] = conjoined
+            return server
+        except:
+            return server
