@@ -2,6 +2,7 @@ from __future__ import absolute_import, unicode_literals
 from .celery import app
 import halocelery.apputils as apputils
 from celery.schedules import crontab
+import shutil
 import tempfile
 import os
 
@@ -87,6 +88,7 @@ def prior_day_scans_to_s3(self, s3_bucket_name):
     except Exception as e:
         "Exception encountered: %s" % e
         "Cleaning up temp dir %s" % output_dir
+        shutil.rmtree(output_dir)
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
 
@@ -100,6 +102,7 @@ def prior_day_events_to_s3(self, s3_bucket_name):
     except Exception as e:
         "Exception encountered: %s" % e
         "Cleaning up temp dir %s" % output_dir
+        shutil.rmtree(output_dir)
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
 
