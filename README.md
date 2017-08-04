@@ -1,0 +1,1 @@
+# Halo tasks for Celery
