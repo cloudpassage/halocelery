@@ -200,7 +200,6 @@ class Halo(object):
             file_number = file_number + 1
             output_file = "Halo-Scans_%s_%s" % (target_date, str(file_number))
             full_output_path = os.path.join(output_dir, output_file)
-            # print("Writing %s" % full_output_path)
             dump_file = Outfile(full_output_path)
             dump_file.flush(batch)
             dump_file.compress()
