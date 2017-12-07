@@ -22,7 +22,7 @@ class Halo(object):
         self.session = cloudpassage.HaloSession(self.halo_api_key,
                                                 self.halo_api_secret)
         self.rw_session = cloudpassage.HaloSession(self.halo_api_key_rw,
-                                                self.halo_api_secret_rw)
+                                                   self.halo_api_secret_rw)
 
     def list_all_servers_formatted(self):
         servers = cloudpassage.Server(self.session)
@@ -268,7 +268,7 @@ class Halo(object):
         return None
 
     def add_ip_to_zone(self, ip_address, zone_name):
-        update_zone = {"firewall_zone":{"name": zone_name}}
+        update_zone = {"firewall_zone": {"name": zone_name}}
         zone_obj = cloudpassage.FirewallZone(self.rw_session)
         zone_id = self.get_id_for_ip_zone(zone_name)
         if zone_id is None:
@@ -285,11 +285,12 @@ class Halo(object):
             existing_ips.append(ip_address)
             update_zone["firewall_zone"]["ip_address"] = util.ipaddress_string_from_list(existing_ips)  # NOQA
             zone_obj.update(update_zone)
-            msg = "Added IP address %s to zone ID %s\n" % (ip_address, zone_name)
+            msg = "Added IP address %s to zone ID %s\n" % (ip_address,
+                                                           zone_name)
         return msg
 
     def remove_ip_from_zone(self, ip_address, zone_name):
-        update_zone = {"firewall_zone":{"name": zone_name}}
+        update_zone = {"firewall_zone": {"name": zone_name}}
         zone_obj = cloudpassage.FirewallZone(self.rw_session)
         zone_id = self.get_id_for_ip_zone(zone_name)
         if zone_id is None:
