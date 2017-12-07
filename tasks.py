@@ -59,6 +59,7 @@ def report_server_scan_graph(target):
     halo = apputils.Halo()
     return halo.generate_scan_compliance_graph_for_server(target)
 
+
 @app.task
 def quarantine_server(server_id, quarantine_group_name):
     halo = apputils.Halo()
@@ -68,15 +69,18 @@ def quarantine_server(server_id, quarantine_group_name):
                                                     quarantine_group_name))
     return msg
 
+
 @app.task
 def add_ip_to_list(ip_address, ip_zone_name):
     halo = apputils.Halo()
     return halo.add_ip_to_zone(ip_address, ip_zone_name)
 
+
 @app.task
 def remove_ip_from_list(ip_address, ip_zone_name):
     halo = apputils.Halo()
     return halo.remove_ip_from_zone(ip_address, ip_zone_name)
+
 
 @app.task(bind=True)
 def prior_day_scans_to_s3(self, s3_bucket_name):
