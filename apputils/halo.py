@@ -237,21 +237,6 @@ class Halo(object):
             retval = FirewallGraph.dot_to_png(grapher.make_dotfile())
         return retval
 
-    def generate_scan_compliance_graph_for_server(self, target):
-        server_id = self.get_id_for_server_target(target)
-        if server_id is None:
-            err_str = "Unknown target: %s\n" % target
-            return err_str
-        target_scan_types = ["csm"]
-        scan_obj = cloudpassage.Scan(self.session)
-        scan_list = []
-        for s_type in target_scan_types:
-            results = scan_obj.last_scan_results(server_id, s_type)["scan"]
-            scan_list.append(results)
-        graph = ScanGraph(scan_list)
-        # print base64.b64decode(graph.render_dot())
-        return graph.render_png()
-
     def move_server(self, server_id, group_id):
         """Silence is golden.  If it doesn't throw an exception, it worked."""
         server_obj = cloudpassage.Server(self.rw_session)

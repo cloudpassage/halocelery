@@ -54,13 +54,6 @@ def report_group_firewall(target):
 
 
 @app.task
-def report_server_scan_graph(target):
-    """Accepts server name or ID, returns a base64-encoded png"""
-    halo = apputils.Halo()
-    return halo.generate_scan_compliance_graph_for_server(target)
-
-
-@app.task
 def report_ec2_halo_footprint_csv():
     """Return a base64-encoded CSV file listing EC2 resources without Halo."""
     runner = apputils.Containerized()
