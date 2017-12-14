@@ -61,6 +61,13 @@ def report_server_scan_graph(target):
 
 
 @app.task
+def report_ec2_halo_footprint_csv():
+    """Return a base64-encoded CSV file listing EC2 resources without Halo."""
+    runner = apputils.Containerized()
+    return runner.halo_ec2_footprint_csv()
+
+
+@app.task
 def quarantine_server(server_id, quarantine_group_name):
     halo = apputils.Halo()
     quarantine_group_id = halo.get_id_for_group_target(quarantine_group_name)

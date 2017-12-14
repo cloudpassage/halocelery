@@ -1,4 +1,3 @@
-import base64
 import cloudpassage
 from datetime import datetime
 import os
@@ -250,7 +249,7 @@ class Halo(object):
             results = scan_obj.last_scan_results(server_id, s_type)["scan"]
             scan_list.append(results)
         graph = ScanGraph(scan_list)
-        print base64.b64decode(graph.render_dot())
+        # print base64.b64decode(graph.render_dot())
         return graph.render_png()
 
     def move_server(self, server_id, group_id):
