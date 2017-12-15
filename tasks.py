@@ -85,10 +85,10 @@ def remove_ip_from_list(ip_address, ip_zone_name):
 @app.task(bind=True)
 def prior_day_scans_to_s3(self, s3_bucket_name):
     output_dir = tempfile.mkdtemp()
-    halo = apputils.Halo()
+    container = apputils.Containerized()
     target_date = apputils.Utility.iso8601_yesterday()
     try:
-        halo.scans_to_s3(target_date, s3_bucket_name, output_dir)
+        container.scans_to_s3(target_date, s3_bucket_name)
     except Exception as e:
         "Exception encountered: %s" % e
         "Cleaning up temp dir %s" % output_dir
@@ -99,10 +99,10 @@ def prior_day_scans_to_s3(self, s3_bucket_name):
 @app.task(bind=True)
 def prior_day_events_to_s3(self, s3_bucket_name):
     output_dir = tempfile.mkdtemp()
-    halo = apputils.Halo()
+    container = apputils.Containerized()
     target_date = apputils.Utility.iso8601_yesterday()
     try:
-        halo.events_to_s3(target_date, s3_bucket_name, output_dir)
+        container.events_to_s3(target_date, s3_bucket_name)
     except Exception as e:
         "Exception encountered: %s" % e
         "Cleaning up temp dir %s" % output_dir
