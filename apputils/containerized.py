@@ -22,7 +22,7 @@ class Containerized(object):
                        "OUTPUT_FORMAT": "csv"}
         try:
             self.client.containers.get(container_name).remove()
-        except docker.errors.ApiError:
+        except docker.errors.APIError:
             pass
         result = self.client.containers.run(image, name=container_name,
                                             detach=False,
