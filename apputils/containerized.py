@@ -32,7 +32,7 @@ class Containerized(object):
         return result.replace('\n', '')
 
     def scans_to_s3(self, target_date, s3_bucket_name):
-        image = "docker.io/halotools/halo-scans-archiver:v0.13"
+        image = "docker.io/halotools/halo-scans-archiver:v0.14"
         container_name = "halo_scans_to_s3"
         mem_limit = "256m"
         environment = {"HALO_API_KEY": self.halo_key,
