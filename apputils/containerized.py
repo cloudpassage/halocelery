@@ -13,15 +13,20 @@ class Containerized(object):
 
     def halo_ec2_footprint_csv(self):
         image = "docker.io/halotools/ec2-halo-delta:v0.1"
+        container_name = "ec2_halo_footprint"
         mem_limit = "256m"
         environment = {"HALO_API_KEY": self.halo_key,
                        "HALO_API_SECRET_KEY": self.halo_secret,
                        "AWS_ACCESS_KEY_ID": self.aws_key,
                        "AWS_SECRET_ACCESS_KEY": self.aws_secret,
                        "OUTPUT_FORMAT": "csv"}
-        result = self.client.containers.run(image, name="ec2_halo_footprint",
-                                            auto_remove=True,
+        try:
+            self.client.containers.get(container_name).remove()
+        except docker.errors.ApiError:
+            pass
+        result = self.client.containers.run(image, name=container_name,
                                             detach=False,
                                             mem_limit=mem_limit,
                                             environment=environment)
+        self.client.containers.get(container_name).remove()
         return result
