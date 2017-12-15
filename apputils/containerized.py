@@ -29,4 +29,4 @@ class Containerized(object):
                                             mem_limit=mem_limit,
                                             environment=environment)
         self.client.containers.get(container_name).remove()
-        return result
+        return result.replace('\n', '')
