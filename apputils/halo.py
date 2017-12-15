@@ -9,7 +9,6 @@ from outfile import Outfile
 from utility import Utility as util
 from formatter import Formatter as fmt
 from firewallgraph import FirewallGraph
-from scangraph import ScanGraph
 
 
 class Halo(object):
