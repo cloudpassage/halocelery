@@ -20,6 +20,12 @@ class Containerized(object):
                        "AWS_ACCESS_KEY_ID": self.aws_key,
                        "AWS_SECRET_ACCESS_KEY": self.aws_secret,
                        "OUTPUT_FORMAT": "csv"}
+        # Populate optional fields to support multi-account inventory.
+        optional_fields = ["AWS_ROLE_NAME", "AWS_ACCOUNT_NUMBERS"]
+        for field in optional_fields:
+            if os.getenv(field, "") != "":
+                environment[field] = os.getenv(field)
+        # Remove the container by name if it still exists from a prior run.
         try:
             self.client.containers.get(container_name).remove()
         except docker.errors.APIError:
@@ -41,6 +47,7 @@ class Containerized(object):
                        "AWS_S3_BUCKET": s3_bucket_name,
                        "AWS_ACCESS_KEY_ID": self.aws_key,
                        "AWS_SECRET_ACCESS_KEY": self.aws_secret}
+        # Remove the container by name if it still exists from a prior run.
         try:
             self.client.containers.get(container_name).remove()
         except docker.errors.APIError:
@@ -62,6 +69,7 @@ class Containerized(object):
                        "AWS_S3_BUCKET": s3_bucket_name,
                        "AWS_ACCESS_KEY_ID": self.aws_key,
                        "AWS_SECRET_ACCESS_KEY": self.aws_secret}
+        # Remove the container by name if it still exists from a prior run.
         try:
             self.client.containers.get(container_name).remove()
         except docker.errors.APIError:
