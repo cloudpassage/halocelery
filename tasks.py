@@ -2,8 +2,6 @@ from __future__ import absolute_import, unicode_literals
 from .celery import app
 import halocelery.apputils as apputils
 from celery.schedules import crontab
-import shutil
-import tempfile
 import os
 
 
@@ -49,8 +47,8 @@ def servers_in_group_formatted(target):
 @app.task
 def report_group_firewall(target):
     """Accepts a hostname or server_id"""
-    halo = apputils.Halo()
-    return halo.generate_group_firewall_report(target)
+    container = apputils.Containerized()
+    return container.generate_firewall_graph(target)
 
 
 @app.task
@@ -84,29 +82,23 @@ def remove_ip_from_list(ip_address, ip_zone_name):
 
 @app.task(bind=True)
 def prior_day_scans_to_s3(self, s3_bucket_name):
-    output_dir = tempfile.mkdtemp()
     container = apputils.Containerized()
     target_date = apputils.Utility.iso8601_yesterday()
     try:
         container.scans_to_s3(target_date, s3_bucket_name)
     except Exception as e:
         "Exception encountered: %s" % e
-        "Cleaning up temp dir %s" % output_dir
-        shutil.rmtree(output_dir)
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
 
 @app.task(bind=True)
 def prior_day_events_to_s3(self, s3_bucket_name):
-    output_dir = tempfile.mkdtemp()
     container = apputils.Containerized()
     target_date = apputils.Utility.iso8601_yesterday()
     try:
         container.events_to_s3(target_date, s3_bucket_name)
     except Exception as e:
         "Exception encountered: %s" % e
-        "Cleaning up temp dir %s" % output_dir
-        shutil.rmtree(output_dir)
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
 

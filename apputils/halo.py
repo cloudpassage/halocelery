@@ -2,7 +2,6 @@ import cloudpassage
 import os
 from utility import Utility as util
 from formatter import Formatter as fmt
-from firewallgraph import FirewallGraph
 
 
 class Halo(object):
@@ -168,26 +167,6 @@ class Halo(object):
         else:
             return fmt.format_list(group.list_members(group_id),
                                    "server_facts")
-
-    def generate_group_firewall_report(self, target):
-        group_id = self.get_id_for_group_target(target)
-        if group_id is None:
-            retval = "Group not found: %s\n" % target
-        else:
-            retval = self.firewall_report_for_group_id(group_id)
-        return retval
-
-    def firewall_report_for_group_id(self, group_id):
-        fw_obj = cloudpassage.FirewallPolicy(self.session)
-        group_obj = cloudpassage.ServerGroup(self.session)
-        group_struct = group_obj.describe(group_id)
-        fw_polid = group_struct["linux_firewall_policy_id"]
-        if fw_polid is None:
-            retval = "No firewall policy for: %s\n" % group_id
-        else:
-            grapher = FirewallGraph(fw_obj.describe(fw_polid))
-            retval = FirewallGraph.dot_to_png(grapher.make_dotfile())
-        return retval
 
     def move_server(self, server_id, group_id):
         """Silence is golden.  If it doesn't throw an exception, it worked."""

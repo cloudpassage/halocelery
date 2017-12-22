@@ -37,6 +37,25 @@ class Containerized(object):
         self.client.containers.get(container_name).remove()
         return result.replace('\n', '')
 
+    def generate_firewall_graph(self, target):
+        image = "docker.io/halotools/firewallgraph:0.1.1"
+        container_name = "halo_firewall_graph"
+        mem_limit = "256m"
+        environment = {"HALO_API_KEY": self.halo_key,
+                       "HALO_API_SECRET_KEY": self.halo_secret,
+                       "TARGET": target}
+        # Remove the container by name if it still exists from a prior run.
+        try:
+            self.client.containers.get(container_name).remove()
+        except docker.errors.APIError:
+            pass
+        result = self.client.containers.run(image, name=container_name,
+                                            detach=False,
+                                            mem_limit=mem_limit,
+                                            environment=environment)
+        self.client.containers.get(container_name).remove()
+        return result.replace('\n', '')
+
     def scans_to_s3(self, target_date, s3_bucket_name):
         image = "docker.io/halotools/halo-scans-archiver:v0.14"
         container_name = "halo_scans_to_s3"
