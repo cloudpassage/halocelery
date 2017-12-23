@@ -38,7 +38,7 @@ class Containerized(object):
         return result.replace('\n', '')
 
     def generate_firewall_graph(self, target):
-        image = "docker.io/halotools/firewallgraph:0.1.1"
+        image = "docker.io/halotools/firewall-graph:0.1.1"
         container_name = "halo_firewall_graph"
         mem_limit = "256m"
         environment = {"HALO_API_KEY": self.halo_key,
