@@ -10,9 +10,15 @@ class Containerized(object):
         self.aws_secret = os.getenv('AWS_SECRET_ACCESS_KEY')
         self.halo_key = os.getenv('HALO_API_KEY')
         self.halo_secret = os.getenv('HALO_API_SECRET_KEY')
+        """Versions for containerized tasks.  Default to latest image."""
+        self.ec2_halo_delta_ver = os.getenv('EC2_HALO_DELTA_VERSION', 'latest')
+        self.fw_graph_ver = os.getenv('FIREWALL_GRAPH_VERSION', 'latest')
+        self.scans_to_s3_ver = os.getenv('SCANS_TO_S3_VERSION', 'latest')
+        self.events_to_s3_ver = os.getenv('EVENTS_TO_S3_VERSION', 'latest')
 
     def halo_ec2_footprint_csv(self):
-        image = "docker.io/halotools/ec2-halo-delta:v0.1"
+        image = ("docker.io/halotools/ec2-halo-delta:%s"
+                 % self.ec2_halo_delta_ver)
         container_name = "ec2_halo_footprint"
         mem_limit = "256m"
         environment = {"HALO_API_KEY": self.halo_key,
@@ -38,7 +44,8 @@ class Containerized(object):
         return result.replace('\n', '')
 
     def generate_firewall_graph(self, target):
-        image = "docker.io/halotools/firewall-graph:0.1.1"
+        image = ("docker.io/halotools/firewall-graph:%s"
+                 % self.fw_graph_ver)
         container_name = "halo_firewall_graph"
         mem_limit = "256m"
         environment = {"HALO_API_KEY": self.halo_key,
@@ -57,7 +64,8 @@ class Containerized(object):
         return result.replace('\n', '')
 
     def scans_to_s3(self, target_date, s3_bucket_name):
-        image = "docker.io/halotools/halo-scans-archiver:v0.14"
+        image = ("docker.io/halotools/halo-scans-archiver:%s"
+                 % self.scans_to_s3_ver)
         container_name = "halo_scans_to_s3"
         mem_limit = "256m"
         environment = {"HALO_API_KEY": self.halo_key,
@@ -79,7 +87,8 @@ class Containerized(object):
         return result
 
     def events_to_s3(self, target_date, s3_bucket_name):
-        image = "docker.io/halotools/halo-events-archiver:v0.10"
+        image = ("docker.io/halotools/halo-events-archiver:%s" %
+                 self.events_to_s3_ver)
         container_name = "halo_events_to_s3"
         mem_limit = "256m"
         environment = {"HALO_API_KEY": self.halo_key,
