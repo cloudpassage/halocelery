@@ -111,7 +111,7 @@ class Halo(object):
             if x["name"] == target:
                 result.append(x)
         if len(result) > 0:
-            return result[0]["id"]
+            return fmt.format_list(result, "group_facts")
         else:
             try:
                 result = group.describe(target)["id"]
@@ -126,7 +126,7 @@ class Halo(object):
         server = cloudpassage.Server(self.session)
         result = server.list_all(hostname=target)
         if len(result) > 0:
-            return result[0]["id"]
+            return fmt.format_list(result, "server_facts")
         else:
             try:
                 result = server.describe(target)["id"]
@@ -162,11 +162,16 @@ class Halo(object):
         """Return a list of servers in group after sending through formatter"""
         group = cloudpassage.ServerGroup(self.session)
         group_id = self.get_id_for_group_target(target)
+
         if group_id is None:
             return group_id
         else:
-            return fmt.format_list(group.list_members(group_id),
+            try:
+                return fmt.format_list(group.list_members(group_id),
                                    "server_facts")
+            except:
+                message = "Found mulitple server groups with same group name\n"
+                return message+group_id
 
     def move_server(self, server_id, group_id):
         """Silence is golden.  If it doesn't throw an exception, it worked."""
