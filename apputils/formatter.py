@@ -25,7 +25,8 @@ class Formatter(object):
                              "  Platform:          $platform\n" +
                              "  Platform version:  $platform_version\n" +
                              "  OS version:        $os_version\n" +
-                             "  Group:             $group_name\n" +
+                             "  Group:             $group_path\n" +
+                             "  Group ID:          $group_id\n" +
                              "  Primary IP:        $primary_ip_address\n" +
                              "  Connecting IP:     $connecting_ip_address\n" +
                              "  State:             $state\n" +
@@ -60,6 +61,7 @@ class Formatter(object):
            "group_facts": T("---------------------------\n" +
                             "Group:\n" +
                             "  Name:         $name\n" +
+                            "  Group Path:   $group_path\n" +
                             "  Group ID:     $id\n" +
                             "  Tag:          $tag\n" +
                             "  Description:  $description\n")}
