@@ -173,6 +173,15 @@ class Halo(object):
                 message = "Found mulitple server groups with same group name\n"
                 return message+group_id
 
+    def get_server_by_cve(self, cve):
+        pagination_key = 'servers'
+        url = '/v1/servers'
+        params = {'cve': cve}
+        hh = cloudpassage.HttpHelper(self.session)
+        servers = hh.get_paginated(url, pagination_key, 5, params=params)
+        message = "Server(s) that contains CVE: %s\n" % cve
+        return message+fmt.format_list(servers, "server_facts")
+
     def move_server(self, server_id, group_id):
         """Silence is golden.  If it doesn't throw an exception, it worked."""
         server_obj = cloudpassage.Server(self.rw_session)

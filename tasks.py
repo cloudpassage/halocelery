@@ -57,6 +57,10 @@ def report_ec2_halo_footprint_csv():
     runner = apputils.Containerized()
     return runner.halo_ec2_footprint_csv()
 
+@app.task
+def search_server_by_cve(target):
+    halo = apputils.Halo()
+    return halo.get_server_by_cve(target)
 
 @app.task
 def quarantine_server(server_id, quarantine_group_name):
