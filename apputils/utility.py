@@ -44,7 +44,8 @@ class Utility(object):
     @classmethod
     def target_date_is_valid(cls, start_date):
         """ Tests date stamp for validity """
-        canary = re.compile(r'^\d{4}-\d{2}-\d{2}$')
+        d_rgex = r'^(19|20)\d\d[-](0[1-9]|1[012])[-](0[1-9]|[12][0-9]|3[01])$'
+        canary = re.compile(d_rgex)
         if canary.match(start_date):
             return True
         else:

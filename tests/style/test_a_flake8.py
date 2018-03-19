@@ -4,6 +4,11 @@ import re
 
 heredir = os.path.abspath(os.path.dirname(__file__))
 code_directory = os.path.join(heredir, '../../apputils')
+<<<<<<< HEAD
+=======
+unit_test_directory = os.path.join(heredir, '../unit')
+functional_test_directory = os.path.join(heredir, '../functional')
+>>>>>>> eab2e2414a407deb16b7efacf7ba262ef4b31fe6
 
 
 def flake8_examine(file_location):
@@ -25,7 +30,9 @@ def get_all_py_files(directory):
 
 class TestF8:
     def test_f8(self):
-        dirs_to_test = [code_directory]
+        dirs_to_test = [code_directory,
+                        unit_test_directory,
+                        functional_test_directory]
         files_to_test = []
         for d in dirs_to_test:
             files_to_test.extend(get_all_py_files(d))
