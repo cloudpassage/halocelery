@@ -53,6 +53,8 @@ class Halo(object):
             grp_struct = group_obj.describe(group_id)
             result = fmt.format_item(grp_struct, "group_facts")
             result += self.get_group_policies(grp_struct)
+        else:
+            result = "Unable to find group %s" % target
         return result
 
     def get_group_policies(self, grp_struct):
@@ -110,29 +112,35 @@ class Halo(object):
         for x in orig_result:
             if x["name"] == target:
                 result.append(x)
-        if len(result) > 0:
+        if len(result) > 1:
             return fmt.format_list(result, "group_facts")
-        else:
+        elif not result:
             try:
-                result = group.describe(target)["id"]
+                result.append(group.describe(target))
             except cloudpassage.CloudPassageResourceExistence:
                 result = None
-            except KeyError:
-                result = None
+        try:
+            return result[0]["id"]
+        except:
+            result = None
         return result
 
     def get_id_for_server_target(self, target):
         """Attempts to get server_id using arg:target as hostname, then id"""
         server = cloudpassage.Server(self.session)
         result = server.list_all(hostname=target)
-        if len(result) > 0:
+        if len(result) > 1:
             return fmt.format_list(result, "server_facts")
-        else:
+        elif not result:
             try:
-                result = server.describe(target)["id"]
-            except:
-                print("Not a hostnamename or server ID: %s\n" % target)
+                result = [server.describe(target)]
+            except cloudpassage.CloudPassageResourceExistence:
                 result = None
+
+        try:
+            return result[0]["id"]
+        except:
+            result = None
         return result
 
     def get_events_by_server(self, server_id, number_of_events=20):
@@ -168,7 +176,7 @@ class Halo(object):
         else:
             try:
                 return fmt.format_list(group.list_members(group_id),
-                                   "server_facts")
+                                       "server_facts")
             except:
                 message = "Found mulitple server groups with same group name\n"
                 return message+group_id
