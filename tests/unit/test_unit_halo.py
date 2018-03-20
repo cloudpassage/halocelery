@@ -1,4 +1,14 @@
-import apputils
+import os
+import sys
+import imp
+
+
+module_name = 'apputils'
+here_dir = os.path.dirname(os.path.abspath(__file__))
+module_path = os.path.join(here_dir, '../../')
+sys.path.append(module_path)
+fp, pathname, description = imp.find_module(module_name)
+apputils = imp.load_module(module_name, fp, pathname, description)
 
 
 class TestUnitHalo:

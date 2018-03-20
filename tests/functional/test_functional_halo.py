@@ -1,7 +1,15 @@
 import cloudpassage
+import imp
 import os
-import apputils
+import sys
 
+
+module_name = 'apputils'
+here_dir = os.path.dirname(os.path.abspath(__file__))
+module_path = os.path.join(here_dir, '../../')
+sys.path.append(module_path)
+fp, pathname, description = imp.find_module(module_name)
+apputils = imp.load_module(module_name, fp, pathname, description)
 
 config_file_name = "portal.yaml"
 tests_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../"))
