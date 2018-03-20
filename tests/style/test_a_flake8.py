@@ -4,11 +4,8 @@ import re
 
 heredir = os.path.abspath(os.path.dirname(__file__))
 code_directory = os.path.join(heredir, '../../apputils')
-<<<<<<< HEAD
-=======
 unit_test_directory = os.path.join(heredir, '../unit')
 functional_test_directory = os.path.join(heredir, '../functional')
->>>>>>> eab2e2414a407deb16b7efacf7ba262ef4b31fe6
 
 
 def flake8_examine(file_location):
