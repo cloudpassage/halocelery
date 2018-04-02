@@ -162,7 +162,10 @@ class Halo(object):
     def get_issues_by_server(self, server_id):
         pagination_key = 'issues'
         url = '/v2/issues'
-        params = {'agent_id': server_id}
+        params = {
+            'agent_id': server_id,
+            'status': 'active'
+        }
         hh = cloudpassage.HttpHelper(self.session)
         issues = hh.get_paginated(url, pagination_key, 5, params=params)
         return issues
