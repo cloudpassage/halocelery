@@ -11,6 +11,12 @@ class Formatter(object):
                       "    Critical: $critical\n" +
                       "    Rule key: $rule_key\n" +
                       "    Created:  $created_at\n"),
+           "grp_issue": T("--------------------------------------\n" +
+                          "  Issue:\n" +
+                          "    Servers affected: $count\n" +
+                          "    Type:             $issue_type\n" +
+                          "    Critical:         $critical\n" +
+                          "    Rule key:         $rule_key\n"),
            "event": T("  ----------------------------------------\n" +
                       "  Event:\n" +
                       "    Type:     $type\n"

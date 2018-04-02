@@ -54,6 +54,9 @@ class Halo(object):
             facts = self.flatten_group(grp_struct)
             result = fmt.format_item(facts, "group_facts")
             result += self.get_group_policies(facts)
+            print("IssueReport: Getting group issues")
+            result += fmt.format_list(self.get_issues_by_group(group_id),
+                                      "grp_issue")
         else:
             result = "Unable to find group %s" % target
         return result
@@ -165,6 +168,20 @@ class Halo(object):
         params = {
             'agent_id': server_id,
             'status': 'active'
+        }
+        hh = cloudpassage.HttpHelper(self.session)
+        issues = hh.get_paginated(url, pagination_key, 5, params=params)
+        return issues
+
+    def get_issues_by_group(self, group_id):
+        pagination_key = 'issues'
+        url = '/v2/issues'
+        params = {
+            'group_id': group_id,
+            'status': 'active',
+            'group_by': 'rule_key,issue_type,critical',
+            'sort_by': 'critical.desc',
+            'descendants': 'true'
         }
         hh = cloudpassage.HttpHelper(self.session)
         issues = hh.get_paginated(url, pagination_key, 5, params=params)
