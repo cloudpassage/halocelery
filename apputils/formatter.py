@@ -60,11 +60,16 @@ class Formatter(object):
                             "      Description:  $description\n"),
            "group_facts": T("---------------------------\n" +
                             "Group:\n" +
-                            "  Name:         $name\n" +
-                            "  Group Path:   $group_path\n" +
-                            "  Group ID:     $id\n" +
-                            "  Tag:          $tag\n" +
-                            "  Description:  $description\n")}
+                            "  Name:            $name\n" +
+                            "  Group Path:      $group_path\n" +
+                            "  Group ID:        $id\n" +
+                            "  Tag:             $tag\n" +
+                            "  Description:     $description\n" +
+                            "  Server Counts:\n" +
+                            "    Total:         $total\n" +
+                            "    Active:        $active\n" +
+                            "    Missing:       $missing\n" +
+                            "    Deactivated:   $deactivated\n")}
 
     @classmethod
     def format_list(cls, items, item_type):

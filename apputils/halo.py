@@ -51,8 +51,9 @@ class Halo(object):
         if group_id is not None:
             group_obj = cloudpassage.ServerGroup(self.session)
             grp_struct = group_obj.describe(group_id)
-            result = fmt.format_item(grp_struct, "group_facts")
-            result += self.get_group_policies(grp_struct)
+            facts = self.flatten_group(grp_struct)
+            result = fmt.format_item(facts, "group_facts")
+            result += self.get_group_policies(facts)
         else:
             result = "Unable to find group %s" % target
         return result
@@ -256,3 +257,9 @@ class Halo(object):
             return server
         except:
             return server
+
+    @classmethod
+    def flatten_group(cls, group):
+        for k, v in group["server_counts"].items():
+            group[k] = v
+        return group
