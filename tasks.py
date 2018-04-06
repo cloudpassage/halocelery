@@ -106,7 +106,7 @@ def prior_day_events_to_s3(self, s3_bucket_name):
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
 @app.task
-def list_vuln_images(self):
+def list_vuln_images():
     container = apputils.Containerized()
     return container.vulnerable_image_check()
 
