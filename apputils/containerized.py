@@ -126,7 +126,8 @@ class Containerized(object):
         container_name = "vulnerable_image_check"
         environment = {
             "HALO_API_KEY": self.halo_key,
-            "HALO_API_SECRET_KEY": self.halo_secret
+            "HALO_API_SECRET_KEY": self.halo_secret,
+            "OCTO_BOX": True
         }
 
         # Remove the container by name if it still exists from a prior run.
