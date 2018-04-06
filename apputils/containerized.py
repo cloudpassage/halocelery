@@ -14,8 +14,10 @@ class Containerized(object):
         """Versions for containerized tasks.  Default to latest image."""
         self.ec2_halo_delta_ver = os.getenv('EC2_HALO_DELTA_VERSION', 'latest')
         self.fw_graph_ver = os.getenv('FIREWALL_GRAPH_VERSION', 'latest')
+        self.vuln_image_ver = os.getenv('VULN_IMAGE_VERSION', 'latest')
         self.scans_to_s3_ver = os.getenv('SCANS_TO_S3_VERSION', 'latest')
         self.events_to_s3_ver = os.getenv('EVENTS_TO_S3_VERSION', 'latest')
+
 
     def halo_ec2_footprint_csv(self):
         image = ("docker.io/halotools/ec2-halo-delta:%s"
@@ -117,3 +119,24 @@ class Containerized(object):
                                             environment=environment)
         self.client.containers.get(container_name).remove()
         return result
+
+    def vulnerable_image_check(self):
+        image = ("docker.io/halotools/vulnerable_image_check:%s" %
+                 self.vuln_image_ver)
+        container_name = "vulnerable_image_check"
+        environment = {
+            "HALO_API_KEY": self.halo_key,
+            "HALO_API_SECRET_KEY": self.halo_secret
+        }
+
+        # Remove the container by name if it still exists from a prior run.
+        try:
+            self.client.containers.get(container_name).remove()
+        except docker.errors.APIError:
+            pass
+        result = self.client.containers.run(image, name=container_name,
+                                            detach=False,
+                                            mem_limit=self.mem_limit,
+                                            environment=environment)
+        self.client.containers.get(container_name).remove()
+        return result.replace('\n', '')

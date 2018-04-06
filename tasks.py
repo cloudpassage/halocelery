@@ -105,6 +105,10 @@ def prior_day_events_to_s3(self, s3_bucket_name):
         "Exception encountered: %s" % e
         raise self.retry(countdown=120, exc=e, max_retries=5)
 
+@app.task
+def list_vuln_images(self):
+    container = apputils.Containerized()
+    return container.vulnerable_image_check()
 
 app.conf.beat_schedule = {
     'daily-events-export': {
