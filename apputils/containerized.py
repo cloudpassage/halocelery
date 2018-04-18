@@ -11,7 +11,7 @@ class Containerized(object):
         self.halo_key = os.getenv('HALO_API_KEY')
         self.halo_secret = os.getenv('HALO_API_SECRET_KEY')
         self.mem_limit = os.getenv('CONTAINER_MEM_LIMIT')
-        self.https_proxy = os.getenv('HTTPS_PROXY_URL')
+        self.https_proxy = os.getenv('HTTPS_PROXY')
         """Versions for containerized tasks.  Default to latest image."""
         self.ec2_halo_delta_ver = os.getenv('EC2_HALO_DELTA_VERSION', 'latest')
         self.fw_graph_ver = os.getenv('FIREWALL_GRAPH_VERSION', 'latest')
