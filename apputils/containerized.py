@@ -11,6 +11,7 @@ class Containerized(object):
         self.halo_key = os.getenv('HALO_API_KEY')
         self.halo_secret = os.getenv('HALO_API_SECRET_KEY')
         self.mem_limit = os.getenv('CONTAINER_MEM_LIMIT')
+        self.https_proxy = os.getenv('HTTPS_PROXY_URL')
         """Versions for containerized tasks.  Default to latest image."""
         self.ec2_halo_delta_ver = os.getenv('EC2_HALO_DELTA_VERSION', 'latest')
         self.fw_graph_ver = os.getenv('FIREWALL_GRAPH_VERSION', 'latest')
@@ -26,6 +27,7 @@ class Containerized(object):
             "HALO_API_SECRET_KEY": self.halo_secret,
             "AWS_ACCESS_KEY_ID": self.aws_key,
             "AWS_SECRET_ACCESS_KEY": self.aws_secret,
+            "HTTPS_PROXY": self.https_proxy,
             "OUTPUT_FORMAT": "csv"
         }
 
@@ -53,6 +55,7 @@ class Containerized(object):
         environment = {
             "HALO_API_KEY": self.halo_key,
             "HALO_API_SECRET_KEY": self.halo_secret,
+            "HTTPS_PROXY": self.https_proxy,
             "TARGET": target
         }
 
@@ -78,7 +81,8 @@ class Containerized(object):
             "TARGET_DATE": target_date,
             "AWS_S3_BUCKET": s3_bucket_name,
             "AWS_ACCESS_KEY_ID": self.aws_key,
-            "AWS_SECRET_ACCESS_KEY": self.aws_secret
+            "AWS_SECRET_ACCESS_KEY": self.aws_secret,
+            "HTTPS_PROXY": self.https_proxy
         }
 
         # Remove the container by name if it still exists from a prior run.
@@ -103,7 +107,8 @@ class Containerized(object):
             "TARGET_DATE": target_date,
             "AWS_S3_BUCKET": s3_bucket_name,
             "AWS_ACCESS_KEY_ID": self.aws_key,
-            "AWS_SECRET_ACCESS_KEY": self.aws_secret
+            "AWS_SECRET_ACCESS_KEY": self.aws_secret,
+            "HTTPS_PROXY": self.https_proxy
         }
 
         # Remove the container by name if it still exists from a prior run.
