@@ -29,7 +29,7 @@ WORKDIR /app/
 RUN groupadd ${APP_GROUP}
 
 RUN useradd \
-        --groups ${APP_GROUP} \
+        -g ${APP_GROUP} \
         --shell /bin/sh \
         --home-dir /app \
         ${APP_USER}
