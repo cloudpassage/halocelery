@@ -1,11 +1,12 @@
-FROM docker.io/halotools/python-sdk:ubuntu-16.04_sdk-1.0.6
+FROM docker.io/halotools/python-sdk:ubuntu-16.04_sdk-1.1.4
+
 MAINTAINER toolbox@cloudpassage.com
 
 ENV HALO_API_HOSTNAME=api.cloudpassage.com
 ENV HALO_API_PORT=443
 
-ENV APP_USER=fieryboat
-ENV APP_GROUP=fieryboatgroup
+ENV APP_USER=halocelery
+ENV APP_GROUP=halocelery
 
 
 # Install components from pip
@@ -28,7 +29,7 @@ WORKDIR /app/
 RUN groupadd ${APP_GROUP}
 
 RUN useradd \
-        --groups ${APP_GROUP} \
+        -g ${APP_GROUP} \
         --shell /bin/sh \
         --home-dir /app \
         ${APP_USER}
