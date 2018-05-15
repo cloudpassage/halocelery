@@ -16,6 +16,9 @@ RUN pip install \
     docker==2.6.1 \
     flower==0.9.1
 
+# Copy over the testing script
+COPY run-tests.sh /app/
+
 # Copy over the app
 RUN mkdir -p /app/halocelery
 
