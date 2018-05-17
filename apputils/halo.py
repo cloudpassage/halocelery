@@ -10,10 +10,13 @@ class Halo(object):
         self.halo_api_secret = os.getenv("HALO_API_SECRET_KEY")
         self.halo_api_key_rw = os.getenv("HALO_API_KEY_RW")
         self.halo_api_secret_rw = os.getenv("HALO_API_SECRET_KEY_RW")
+        self.halo_api_host = os.getenv("HALO_API_HOSTNAME")
         self.session = cloudpassage.HaloSession(self.halo_api_key,
-                                                self.halo_api_secret)
+                                                self.halo_api_secret,
+                                                api_host=self.halo_api_host)
         self.rw_session = cloudpassage.HaloSession(self.halo_api_key_rw,
-                                                   self.halo_api_secret_rw)
+                                                   self.halo_api_secret_rw,
+                                                   api_host=self.halo_api_host)
 
     def list_all_servers_formatted(self):
         """Return a list of all servers, formatted for Slack."""
