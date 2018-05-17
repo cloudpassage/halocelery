@@ -81,6 +81,7 @@ class Containerized(object):
                  % self.ec2_halo_delta_ver)
         env_expand = {"HALO_API_KEY": "HALO_API_KEY",
                       "HALO_API_SECRET_KEY": "HALO_API_SECRET_KEY",
+                      "HALO_API_HOSTNAME": "HALO_API_HOSTNAME",
                       "AWS_ACCESS_KEY_ID": "AWS_ACCESS_KEY_ID",
                       "AWS_SECRET_ACCESS_KEY": "AWS_SECRET_ACCESS_KEY",
                       "HTTPS_PROXY": "HTTPS_PROXY"}
@@ -99,6 +100,7 @@ class Containerized(object):
         env_vars = {"TARGET": target}
         env_expand = {"HALO_API_KEY": "HALO_API_KEY",
                       "HALO_API_SECRET_KEY": "HALO_API_SECRET_KEY",
+                      "HALO_API_HOSTNAME": "HALO_API_HOSTNAME",
                       "HTTPS_PROXY": "HTTPS_PROXY"}
         result = self.generic_container_launch_attached(image, env_vars,
                                                         env_expand, False)
@@ -111,6 +113,7 @@ class Containerized(object):
                     "AWS_S3_BUCKET": s3_bucket_name}
         env_expand = {"HALO_API_KEY": "HALO_API_KEY",
                       "HALO_API_SECRET_KEY": "HALO_API_SECRET_KEY",
+                      "HALO_API_HOSTNAME": "HALO_API_HOSTNAME",
                       "AWS_ACCESS_KEY_ID": "AWS_ACCESS_KEY_ID",
                       "AWS_SECRET_ACCESS_KEY": "AWS_SECRET_ACCESS_KEY",
                       "HTTPS_PROXY": "HTTPS_PROXY"}
@@ -125,6 +128,7 @@ class Containerized(object):
                     "AWS_S3_BUCKET": s3_bucket_name}
         env_expand = {"HALO_API_KEY": "HALO_API_KEY",
                       "HALO_API_SECRET_KEY": "HALO_API_SECRET_KEY",
+                      "HALO_API_HOSTNAME": "HALO_API_HOSTNAME",
                       "AWS_ACCESS_KEY_ID": "AWS_ACCESS_KEY_ID",
                       "AWS_SECRET_ACCESS_KEY": "AWS_SECRET_ACCESS_KEY",
                       "HTTPS_PROXY": "HTTPS_PROXY"}
