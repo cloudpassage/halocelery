@@ -7,7 +7,7 @@ script:
   - docker run -it --rm -e RUN_INTEGRATION_TESTS=True -e HALO_API_KEY=$HALO_API_KEY
     -e HALO_API_SECRET_KEY=$HALO_API_SECRET_KEY -e HALO_API_KEY_RW=$HALO_API_KEY
     -e HALO_API_SECRET_KEY_RW=$HALO_API_SECRET_KEY -e FIREWALL_GRAPH_GROUP=$FIREWALL_GRAPH_GROUP
-    --user root -v /var/run/docker.sock:/var/run/docker.sock halocelery /app/run-tests.sh
+    --user root -v /var/run/docker.sock:/var/run/docker.sock halocelery unbuffer /app/run-tests.sh
 env:
   global:
   - FIREWALL_GRAPH_GROUP: SDK

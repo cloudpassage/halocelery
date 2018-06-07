@@ -1,3 +1,4 @@
+# import capsys
 import datetime
 import os
 import sys
@@ -45,3 +46,29 @@ class TestUnitUtility:
         data = "123,456"
         ip_list = utility.ipaddress_list_from_string(data)
         assert ip_list == ["123", "456"]
+
+    def test_log_stdout(self, capsys):
+        apputils.Utility.log_stdout("Hello World")
+        captured = capsys.readouterr()
+        assert "Hello World" in captured[0]
+        assert captured[1] == ""
+
+    def test_log_stdout_with_component(self, capsys):
+        apputils.Utility.log_stdout("Hello World", "Component")
+        captured = capsys.readouterr()
+        assert "Hello World" in captured[0]
+        assert "Component" in captured[0]
+        assert captured[1] == ""
+
+    def test_log_stderr(self, capsys):
+        apputils.Utility.log_stderr("Hello World")
+        captured = capsys.readouterr()
+        assert "Hello World" in captured[1]
+        assert captured[0] == ""
+
+    def test_log_stderr_with_component(self, capsys):
+        apputils.Utility.log_stderr("Hello World", "Component")
+        captured = capsys.readouterr()
+        assert "Hello World" in captured[1]
+        assert "Component" in captured[1]
+        assert captured[0] == ""

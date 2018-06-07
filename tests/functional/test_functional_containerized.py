@@ -17,12 +17,6 @@ class TestIntegrationContainerized:
     def build_containerized_object(self):
         return apputils.Containerized()
 
-    def test_firewall_graph_latest(self):
-        container = self.build_containerized_object()
-        resp = container.generate_firewall_graph(firewall_group)
-        assert isinstance(resp, basestring)
-        assert len(resp) > 1000  # This gives us a lot of b64-encoded info.
-
     def test_name_generator(self):
         sample = set({})
         for x in range(1000):
@@ -38,3 +32,16 @@ class TestIntegrationContainerized:
                                                                 in_exp_vars)
         assert out["FOO"] == "BAZ"
         assert out["HELLO"] == "WORLD"
+
+    def test_generic_containerized_task(self):
+        img_tag = os.getenv('FIREWALL_GRAPH_VERSION', 'latest')
+        image = "docker.io/halotools/firewall-graph:%s" % img_tag
+        cont = apputils.Containerized()
+        env_literal = {"TARGET": firewall_group}
+        env_expand = {"HALO_API_KEY": "HALO_API_KEY",
+                      "HALO_API_SECRET_KEY": "HALO_API_SECRET_KEY",
+                      "HALO_API_HOSTNAME": "HALO_API_HOSTNAME",
+                      "HTTPS_PROXY": "HTTPS_PROXY"}
+        results = cont.generic_container_launch_attached(image, env_literal,
+                                                         env_expand, False)
+        assert len(results) > 1000  # We get a lot of base64 back.
