@@ -12,9 +12,17 @@ ENV APP_GROUP=halocelery
 # Install components from pip
 RUN pip install \
     boto3==1.4.3 \
-    celery[redis]==4.0.2 \
+    celery[redis]==4.2.0rc4 \
     docker==2.6.1 \
     flower==0.9.1
+
+# Install expect, so that we can run 'unbuffer'
+RUN apt-get update && \
+    apt-get install -y \
+    expect
+
+# Copy over the testing script
+COPY run-tests.sh /app/
 
 # Copy over the app
 RUN mkdir -p /app/halocelery
