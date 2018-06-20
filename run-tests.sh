@@ -11,14 +11,14 @@ pip install \
 echo "Run integration tests? ${RUN_INTEGRATION_TESTS}"
 if [ "$RUN_INTEGRATION_TESTS" = "True" ] ; \
     then echo "Run all tests" && \
-        python -m py.test \
+        python -m py.test -v \
             --cov-report term-missing \
             --cov=apputils \
             /app/halocelery/tests/style \
             /app/halocelery/tests/unit \
             /app/halocelery/tests/functional ;  \
     else echo Not running integration tests!. && \
-        python -m py.test \
+        python -m py.test -v \
             /app/halocelery/tests/style \
             /app/halocelery/tests/unit ; \
     fi

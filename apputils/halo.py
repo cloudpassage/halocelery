@@ -2,6 +2,7 @@ import cloudpassage
 import os
 from utility import Utility as util
 from formatter import Formatter as fmt
+from utility import Utility
 
 
 class Halo(object):
@@ -35,18 +36,18 @@ class Halo(object):
         if len(server_ids) == 0:
             return "Unable to find server %s" % target
         for server_id in server_ids:
-            print("ServerReport: Starting report for %s" % server_id)
+            Utility.log_stdout("ServerReport: Starting report for %s" % server_id)  # NOQA
             server_obj = cloudpassage.Server(self.session)
-            print("ServerReport: Getting server facts")
+            Utility.log_stdout("ServerReport: Getting server facts")
             facts = self.flatten_ec2(server_obj.describe(server_id))
             if "aws_ec2" in facts:
                 result = fmt.format_item(facts, "server_ec2")
             else:
                 result = fmt.format_item(facts, "server_facts")
-            print("ServerReport: Getting server issues")
+            Utility.log_stdout("ServerReport: Getting server issues")
             result += fmt.format_list(self.get_issues_by_server(server_id),
                                       "issue")
-            print("ServerReport: Getting server events")
+            Utility.log_stdout("ServerReport: Getting server events")
             result += fmt.format_list(self.get_events_by_server(server_id),
                                       "event")
         return result
@@ -71,7 +72,7 @@ class Halo(object):
             facts = self.flatten_group(grp_struct)
             result = fmt.format_item(facts, "group_facts")
             result += self.get_group_policies(facts)
-            print("IssueReport: Getting group issues")
+            Utility.log_stdout("IssueReport: Getting group issues")
             result += fmt.format_list(self.get_issues_by_group(g_id),
                                       "grp_issue")
         return result
@@ -84,19 +85,19 @@ class Halo(object):
         csm_keys = ["policy_ids", "windows_policy_ids"]
         fim_keys = ["fim_policy_ids", "windows_fim_policy_ids"]
         lids_keys = ["lids_policy_ids"]
-        print("Getting meta for FW policies")
+        Utility.log_stdout("Getting meta for FW policies")
         for fwp in firewall_keys:
             retval += self.get_policy_metadata(grp_struct[fwp], "FW")
-        print("Getting meta for CSM policies")
+        Utility.log_stdout("Getting meta for CSM policies")
         for csm in csm_keys:
             retval += self.get_policy_list(grp_struct[csm], "CSM")
-        print("Getting meta for FIM policies")
+        Utility.log_stdout("Getting meta for FIM policies")
         for fim in fim_keys:
             retval += self.get_policy_list(grp_struct[fim], "FIM")
-        print("Getting meta for LIDS policies")
+        Utility.log_stdout("Getting meta for LIDS policies")
         for lids in lids_keys:
             retval += self.get_policy_list(grp_struct[lids], "LIDS")
-        print("Gathered all policy metadata successfully")
+        Utility.log_stdout("Gathered all policy metadata successfully")
         return retval
 
     def get_policy_list(self, policy_ids, policy_type):

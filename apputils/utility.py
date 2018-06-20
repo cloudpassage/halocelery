@@ -1,5 +1,7 @@
+from __future__ import print_function
 import datetime
 import re
+import sys
 
 
 class Utility(object):
@@ -10,6 +12,20 @@ class Utility(object):
         """Returns an ISO8601-formatted string for datetime arg"""
         retval = date_obj.isoformat()
         return retval
+
+    @classmethod
+    def event_is_critical(cls, event):
+        return event["critical"]
+
+    @classmethod
+    def ipaddress_list_from_string(cls, string_of_ips):
+        ip_list = string_of_ips.split(',')
+        return ip_list
+
+    @classmethod
+    def ipaddress_string_from_list(cls, list_structure):
+        ip_str = ",".join(list_structure)
+        return ip_str
 
     @classmethod
     def iso8601_arbitrary_days_ago(cls, days_ago):
@@ -38,8 +54,28 @@ class Utility(object):
         return Utility.iso8601_arbitrary_days_ago(30)
 
     @classmethod
-    def event_is_critical(cls, event):
-        return event["critical"]
+    def log_stdout(cls, message, component="Halocelery"):
+        """Log messages to stdout.
+
+        Args:
+            message(str): Message to be logged to stdout.
+            component(str): Component name. Defaults to "Halocelery".
+        """
+        out = "%s: %s" % (component, message)
+        print(out, file=sys.stdout)
+        return
+
+    @classmethod
+    def log_stderr(cls, message, component="Halocelery"):
+        """Log messages to stderr.
+
+        Args:
+            message(str): Message to be logged to stdout.
+            component(str): Component name. Defaults to "Halocelery".
+        """
+        out = "%s: %s" % (component, message)
+        print(out, file=sys.stderr)
+        return
 
     @classmethod
     def target_date_is_valid(cls, start_date):
@@ -50,13 +86,3 @@ class Utility(object):
             return True
         else:
             return False
-
-    @classmethod
-    def ipaddress_string_from_list(cls, list_structure):
-        ip_str = ",".join(list_structure)
-        return ip_str
-
-    @classmethod
-    def ipaddress_list_from_string(cls, string_of_ips):
-        ip_list = string_of_ips.split(',')
-        return ip_list
