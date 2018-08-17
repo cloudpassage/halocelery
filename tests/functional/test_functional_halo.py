@@ -25,6 +25,11 @@ class TestIntegrationHalo:
         halo = self.build_halo_object()
         resp = halo.list_all_groups_formatted()
         assert "Group" and "Group ID" and "Group Path" in resp
+        # Ensure all templated fields are populated
+        assert "$total" not in resp
+        assert "$active" not in resp
+        assert "$missing" not in resp
+        assert "$deactivated" not in resp
 
     def test_unable_to_generate_server_report(self):
         halo = self.build_halo_object()
