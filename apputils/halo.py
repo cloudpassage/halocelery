@@ -26,8 +26,10 @@ class Halo(object):
 
     def list_all_groups_formatted(self):
         """Return a list of all groups, formatted for Slack."""
-        groups = cloudpassage.ServerGroup(self.session)
-        return fmt.format_list(groups.list_all(), "group_facts")
+        groups_obj = cloudpassage.ServerGroup(self.session)
+        g_ids = [x["id"] for x in groups_obj.list_all()]
+        groups = [self.flatten_group(groups_obj.describe(x)) for x in g_ids]
+        return fmt.format_list(groups, "group_facts")
 
     def generate_server_report_formatted(self, target):
         """Return a formatted server report for arg:target server."""
