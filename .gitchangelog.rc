@@ -77,7 +77,7 @@ ignore_regexps = [
         r'@wip', r'!wip',
         r'^([cC]hg|[fF]ix|[nN]ew)\s*:\s*[p|P]kg:',
         r'^([cC]hg|[fF]ix|[nN]ew)\s*:\s*[d|D]ev:',
-        r'^(.{3,3}\s*:)?\s*[fF]irst commit.?\s*$',
+        r'^(.{3,3}\s*:)?\s*[fF]irst commit.?\s*$'
   ]
 
 
@@ -202,4 +202,4 @@ output_engine = rest_py
 ##
 ## This option tells git-log whether to include merge commits in the log.
 ## The default is to include them.
-include_merge = False
+include_merge = False 
