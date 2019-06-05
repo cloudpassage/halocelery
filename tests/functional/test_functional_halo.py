@@ -117,3 +117,8 @@ class TestIntegrationHalo:
         for zone in all_zones:
             if zone["name"] != "any":
                 return zone
+
+    def test_integration_string(self):
+        """Test to verify integration_string is constructed correctly"""
+        halo = self.build_halo_object()
+        assert halo.integration_string == apputils.__version__
