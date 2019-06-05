@@ -1,8 +1,8 @@
 #!/bin/sh
 # Install testing libs and run tests.
 pip install \
-    pytest==3.1.1 \
-    pytest-cover==3.0.0 \
+    pytest~=4.4.0 \
+    pytest-cov==2.3.1 \
     pytest-flake8==0.6 \
     pyflakes==1.2.3 \
     flake8==3.0.0
