@@ -121,4 +121,4 @@ class TestIntegrationHalo:
     def test_integration_string(self):
         """Test to verify integration_string is constructed correctly"""
         halo = self.build_halo_object()
-        assert halo.integration_string == apputils.__version__
+        assert halo.integration_string == "halocelery/%s" % apputils.__version__
