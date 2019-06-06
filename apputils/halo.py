@@ -1,5 +1,6 @@
 import cloudpassage
 import os
+import re
 from utility import Utility as util
 from formatter import Formatter as fmt
 from utility import Utility
@@ -12,12 +13,19 @@ class Halo(object):
         self.halo_api_key_rw = os.getenv("HALO_API_KEY_RW")
         self.halo_api_secret_rw = os.getenv("HALO_API_SECRET_KEY_RW")
         self.halo_api_host = os.getenv("HALO_API_HOSTNAME")
-        self.session = cloudpassage.HaloSession(self.halo_api_key,
-                                                self.halo_api_secret,
-                                                api_host=self.halo_api_host)
-        self.rw_session = cloudpassage.HaloSession(self.halo_api_key_rw,
-                                                   self.halo_api_secret_rw,
-                                                   api_host=self.halo_api_host)
+        self.integration_string = self.get_integration_string()
+        self.session = cloudpassage.HaloSession(
+            self.halo_api_key,
+            self.halo_api_secret,
+            api_host=self.halo_api_host,
+            integration_string=self.integration_string
+        )
+        self.rw_session = cloudpassage.HaloSession(
+            self.halo_api_key_rw,
+            self.halo_api_secret_rw,
+            api_host=self.halo_api_host,
+            integration_string=self.integration_string
+        )
 
     def list_all_servers_formatted(self):
         """Return a list of all servers, formatted for Slack."""
@@ -328,6 +336,20 @@ class Halo(object):
         except ValueError:
             msg = "IP %s was not found in zone %s\n" % (ip_address, zone_name)
         return msg
+
+    def get_integration_string(self):
+        """Return integration string for this tool."""
+        return "halocelery/%s" % self.get_tool_version()
+
+    def get_tool_version(self):
+        """Get version of this tool from the __init__.py file."""
+        here_path = os.path.abspath(os.path.dirname(__file__))
+        init_file = os.path.join(here_path, "__init__.py")
+        ver = 0
+        with open(init_file, 'r') as i_f:
+            rx_compiled = re.compile(r"\s*__version__\s*=\s*\"(\S+)\"")
+            ver = rx_compiled.search(i_f.read()).group(1)
+        return ver
 
     @classmethod
     def flatten_ec2(cls, server):

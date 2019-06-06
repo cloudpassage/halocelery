@@ -44,4 +44,4 @@ class TestIntegrationContainerized:
                       "HTTPS_PROXY": "HTTPS_PROXY"}
         results = cont.generic_container_launch_attached(image, env_literal,
                                                          env_expand, False)
-        assert len(results) > 1000  # We get a lot of base64 back.
+        assert len(results) > 100  # We get a lot of base64 back.
