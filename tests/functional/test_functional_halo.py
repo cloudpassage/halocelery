@@ -66,7 +66,7 @@ class TestIntegrationHalo:
 
     def test_get_id_for_duplicate_group_target(self):
         halo = self.build_halo_object()
-        resp = halo.get_id_for_group_target("duplicate")
+        resp = halo.get_id_for_group_target("cloudpassage/halocelery")
         assert isinstance(resp, list)
         assert len(resp) > 1
 
@@ -121,4 +121,5 @@ class TestIntegrationHalo:
     def test_integration_string(self):
         """Test to verify integration_string is constructed correctly"""
         halo = self.build_halo_object()
-        assert halo.integration_string == "halocelery/%s" % apputils.__version__
+        integration_string = halo.integration_string
+        assert integration_string == "halocelery/%s" % apputils.__version__
