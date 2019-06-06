@@ -66,7 +66,7 @@ class TestIntegrationHalo:
 
     def test_get_id_for_duplicate_group_target(self):
         halo = self.build_halo_object()
-        resp = halo.get_id_for_group_target("cloudpassage/halocelery")
+        resp = halo.get_id_for_group_target("duplicate")
         assert isinstance(resp, list)
         assert len(resp) > 1
 
