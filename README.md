@@ -28,3 +28,8 @@ configuration file can be found [here](./example.conf)
 each config file: `[service]`, `[task_config]`, `[log_config]`, `[schedule]`,
 `[env_literal]`, and `[env_expand]`.  These sections are described in detail,
 in the sample configuration file referenced above.
+
+<!---
+#CPTAGS:community-supported automation
+#TBICON:images/python_icon.png
+-->
