@@ -1,8 +1,8 @@
 import cloudpassage
 import os
-from utility import Utility as util
-from formatter import Formatter as fmt
-from utility import Utility
+from .utility import Utility as util
+from .formatter import Formatter as fmt
+from .utility import Utility
 
 
 class Halo(object):

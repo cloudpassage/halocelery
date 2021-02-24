@@ -1,4 +1,4 @@
-from utility import Utility
+from .utility import Utility
 import docker
 import os
 import uuid

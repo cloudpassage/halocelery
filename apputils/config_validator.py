@@ -1,5 +1,5 @@
 """Validator for config files."""
-import ConfigParser
+import configparser
 
 
 class ConfigValidator(object):
@@ -24,7 +24,7 @@ class ConfigValidator(object):
         try:
             if config.get("service", "module") == "scheduler":
                 return True
-        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        except (configparser.NoSectionError, configparser.NoOptionError):
             pass
         return False
 

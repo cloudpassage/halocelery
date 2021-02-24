@@ -1,4 +1,4 @@
-FROM docker.io/halotools/python-sdk:ubuntu-16.04_sdk-1.1.4
+FROM docker.io/halotools/python-sdk:ubuntu-18.04_sdk-latest_py-3.6
 
 MAINTAINER toolbox@cloudpassage.com
 
@@ -9,8 +9,8 @@ ENV APP_USER=halocelery
 ENV APP_GROUP=halocelery
 
 
-# Install components from pip
-RUN pip install \
+# Install components from pip3
+RUN pip3 install \
     boto3==1.4.3 \
     celery[redis]==4.2.0rc4 \
     docker==2.6.1 \

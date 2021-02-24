@@ -1,9 +1,9 @@
 """Configuration Manager."""
 from celery.schedules import crontab
-from config_validator import ConfigValidator
-from utility import Utility
+from .config_validator import ConfigValidator
+from .utility import Utility
 from string import Template
-import ConfigParser
+import configparser
 import os
 
 
@@ -117,7 +117,7 @@ class ConfigManager(object):
             config: RawConfigParser() instance.
 
         """
-        config = ConfigParser.RawConfigParser({}, dict)
+        config = configparser.RawConfigParser({}, dict)
         config.optionxform = str
         with open(config_file_path, 'r') as conf_file:
             config.readfp(conf_file)
