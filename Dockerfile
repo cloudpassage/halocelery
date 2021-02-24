@@ -2,6 +2,8 @@ FROM docker.io/halotools/python-sdk:ubuntu-18.04_sdk-latest_py-3.6
 
 MAINTAINER toolbox@cloudpassage.com
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 ENV HALO_API_HOSTNAME=api.cloudpassage.com
 ENV HALO_API_PORT=443
 
