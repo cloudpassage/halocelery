@@ -211,11 +211,13 @@ class Halo(object):
     def get_issues_by_group(self, group_id):
         """Return all issues for group identified by arg:group_id."""
         pagination_key = 'issues'
-        url = '/v2/issues'
+        #url = '/v2/issues'
+        url = '/v3/issues'
         params = {
             'group_id': group_id,
             'status': 'active',
-            'group_by': 'rule_key,issue_type,critical',
+            #'group_by': 'rule_key,issue_type,critical',
+            'group_by': 'critical',
             'sort_by': 'critical.desc',
             'descendants': 'true'
         }
