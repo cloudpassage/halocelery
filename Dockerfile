@@ -4,19 +4,21 @@ MAINTAINER toolbox@cloudpassage.com
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV HALO_API_HOSTNAME=api.cloudpassage.com
-ENV HALO_API_PORT=443
+ENV HALO_API_HOSTNAME='api.cloudpassage.com'
+ENV HALO_API_PORT='443'
 
-ENV APP_USER=halocelery
-ENV APP_GROUP=halocelery
+ENV APP_USER='halocelery'
+ENV APP_GROUP='halocelery'
 
 
 # Install components from pip3
 RUN pip3 install \
-    boto3==1.4.3 \
-    celery[redis]==4.2.0rc4 \
-    docker==2.6.1 \
-    flower==0.9.1
+    boto3==1.17.34 \
+    celery[redis]==5.0.5 \
+    docker==4.4.4 \
+    flower==0.9.7 \
+	redis==3.5.3 \
+	cloudpassage==1.6.2
 
 # Install expect, so that we can run 'unbuffer'
 RUN apt-get update && \

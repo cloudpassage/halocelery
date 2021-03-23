@@ -158,5 +158,7 @@ def generic_bound_containerized_task(self, image, env_literal, env_expand,
 config_manager = apputils.ConfigManager(os.getenv("HALOCELERY_CONFIG_DIR",
                                         "/app/halocelery/config/"))
 
+'''config_manager = apputils.ConfigManager(os.getenv("HALOCELERY_CONFIG_DIR",
+                                        "/halocelery/config/"))'''
 
 app.conf.beat_schedule = config_manager.beat_tasks_from_config()
